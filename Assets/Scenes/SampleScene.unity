@@ -884,15 +884,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 664622335703365192, guid: 33773cb9b2e95024f96ad1345dde3d6f, type: 3}
       propertyPath: targetDist
-      value: 1.1
+      value: 1.12
       objectReference: {fileID: 0}
     - target: {fileID: 664622335703365192, guid: 33773cb9b2e95024f96ad1345dde3d6f, type: 3}
       propertyPath: smoothSpeed
-      value: 0.003
+      value: 0.02
       objectReference: {fileID: 0}
     - target: {fileID: 1420471321164341908, guid: 33773cb9b2e95024f96ad1345dde3d6f, type: 3}
       propertyPath: length
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 2080591836620581669, guid: 33773cb9b2e95024f96ad1345dde3d6f, type: 3}
       propertyPath: m_RootOrder
