@@ -7,23 +7,32 @@ public class HUDController : MonoBehaviour
 {
 
     public static HUDController Instance;
-
-    [SerializeField] private TextMeshProUGUI stoneText, steelText, goldText, wormoniumText;
+    private ResourceManager resourceManager;
+    
+    public Dictionary<string, TextMeshProUGUI> resourceTextDict;
+    public GameObject resourcePanelPrefab;
+    public GameObject resourcesPanelUI;
 
     private void Awake()
     {
-
         #region set instance
         if (Instance == null)
             Instance = this;
         else
             Destroy(this);
         #endregion
-
     }
 
     private void Start()
     {
+        resourceManager = ResourceManager.Instance;
+        resourceTextDict = new Dictionary<string, TextMeshProUGUI>();
+        // create the dictionnary based on ResourceManager's resourceTypes
+        foreach (string name in ResourceManager.Instance.resourceTypes)
+        {
+            resourceTextDict.Add(name, null);
+        }
+        
         InitializeHUD();
     }
 
@@ -39,35 +48,32 @@ public class HUDController : MonoBehaviour
     }
     #endregion
 
-    private void UpdateResourceHUD(ResourceType type)
+    private void UpdateResourceHUD(string type)
     {
-        switch (type) 
-        {
-
-            case ResourceType.STONE:
-                stoneText.text = "Stone: " + ResourceManager.Instance.stoneAmt;
-                break;
-            case ResourceType.STEEL:
-                steelText.text = "Steel: " + ResourceManager.Instance.steelAmt;
-                break;
-            case ResourceType.GOLD:
-                goldText.text = "Gold: " + ResourceManager.Instance.goldAmt;
-                break;
-            case ResourceType.WORMONIUM:
-                wormoniumText.text = "Wormonium: " + ResourceManager.Instance.wormoniumAmt;
-                break;
-
-        }
+        // access the specific text UI and update it
+        resourceTextDict[type].text = resourceManager.resourceDict[type].ToString();
     }
 
+    /**
+     * Create the resource panels in the HUD
+     */
     public void InitializeHUD()
     {
-
-        stoneText.text = "Stone: " + ResourceManager.Instance.stoneAmt;
-        steelText.text = "Steel: " + ResourceManager.Instance.steelAmt;
-        goldText.text = "Gold: " + ResourceManager.Instance.goldAmt;
-        wormoniumText.text = "Wormonium: " + ResourceManager.Instance.wormoniumAmt;
-
+        for (int i=0; i<resourceManager.resourceTypes.Length; i++)
+        {
+            GameObject resourcePanel = Instantiate(resourcePanelPrefab, transform);
+            resourcePanel.name =  resourceManager.resourceTypes[i] + "Panel";
+            
+            // create the resource panel
+            ResourcePanel panel = resourcePanel.GetComponent<ResourcePanel>();
+            panel.icon.sprite = resourceManager.resourceImages[i];
+            panel.text.text = "0";
+            
+            // assign the text UI to the dictionary
+            resourceTextDict[resourceManager.resourceTypes[i]] = panel.text;
+            
+            resourcePanel.transform.SetParent(resourcesPanelUI.transform, false);
+        }
     }
 
 }

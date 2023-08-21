@@ -1,71 +1,57 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using Mono.Cecil;
 using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
 
     public static ResourceManager Instance;
+    public string[] resourceTypes;
+    public Sprite[] resourceImages;
+    
+    public Dictionary<string, int> resourceDict = new Dictionary<string, int>();
 
-    [HideInInspector] public int stoneAmt, steelAmt, goldAmt, wormoniumAmt;
-
-    public static event Action<ResourceType> CollectResourcesEvent;
+    public static event Action<string> CollectResourcesEvent;
 
     private void Awake()
     {
-
         #region set instance
         if (Instance == null)
             Instance = this;
         else
             Destroy(this);
         #endregion
+    }
 
+    private void Start()
+    {
+        if (resourceTypes.Length != resourceImages.Length)
+        {
+            Debug.LogError("Resource types and images are not the same length!");
+        }
+        
+        foreach (string s in resourceTypes)
+        {
+            resourceDict.Add(s, 0);
+        }
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            ChangeResource(ResourceType.STONE, 5);
+        {
+            ChangeResource("stone", 5);
+        }
     }
 
-    public void ChangeResource(ResourceType type, int amount)
+    public void ChangeResource(string type, int amount)
     {
-
-        switch (type)
-        {
-
-            case ResourceType.STONE:
-                stoneAmt += amount;
-                break;
-
-            case ResourceType.STEEL:
-                steelAmt += amount;
-                break;
-
-            case ResourceType.GOLD:
-                goldAmt += amount;
-                break;
-
-            case ResourceType.WORMONIUM:
-                wormoniumAmt += amount;
-                break;
-        }
+        resourceDict[type] += amount;
 
         if (CollectResourcesEvent != null)
+        {
             CollectResourcesEvent(type);
-
+        }
     }
-
-
-}
-
-public enum ResourceType
-{
-    STONE,
-    STEEL,
-    GOLD,
-    WORMONIUM,
 }

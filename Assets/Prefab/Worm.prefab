@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 558b92c960fe41c19be3165a69850c48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  length: 2
+  length: 15
   segmentPrefab: {fileID: 2750267846213995914, guid: b3ee8dc37a6240c4c9bcd74c7e8fdbb2, type: 3}
 --- !u!1 &2080591836829630321
 GameObject:
