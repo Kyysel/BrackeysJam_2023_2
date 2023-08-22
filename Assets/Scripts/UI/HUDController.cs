@@ -13,6 +13,9 @@ public class HUDController : MonoBehaviour
     public GameObject resourcePanelPrefab;
     public GameObject resourcesPanelUI;
 
+    public GameObject buildingPanelUI;
+    public GameObject buildingPanelPrefab;
+
     private void Awake()
     {
         #region set instance
@@ -53,6 +56,14 @@ public class HUDController : MonoBehaviour
         // access the specific text UI and update it
         resourceTextDict[type].text = resourceManager.resourceDict[type].ToString();
     }
+    
+    public void UpdateResourceHUD()
+    {
+        foreach (string resource in resourceManager.resourceTypes)
+        {
+            resourceTextDict[resource].text = resourceManager.resourceDict[resource].ToString();
+        }
+    }
 
     /**
      * Create the resource panels in the HUD
@@ -74,6 +85,20 @@ public class HUDController : MonoBehaviour
             
             resourcePanel.transform.SetParent(resourcesPanelUI.transform, false);
         }
+
+        foreach (Building building in BuildingManager.Instance.buildingsAvailable)
+        {
+            GameObject buildingPanel = Instantiate(buildingPanelPrefab, transform);
+            buildingPanel.name = building.name + "Panel";
+            
+            //create the building panel
+            BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();
+            panel.icon.sprite = building.icon;
+            //TODO add the list of resources need to build
+            
+            buildingPanel.transform.SetParent(buildingPanelUI.transform, false);
+        }
+        
     }
 
 }
