@@ -732,7 +732,7 @@ MonoBehaviour:
   buildingPanelPrefab: {fileID: 5988134611129327835, guid: c4d414b34a48f244185b38bd5c5c5831, type: 3}
   topPanelHUD: {fileID: 2048747083}
   hudActive: 0
-  _topPanelHUDTransform: {x: 0, y: 0, z: 0}
+  topPanelHUDTransform: {x: 0, y: 0, z: 0}
 --- !u!114 &690544513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,6 +1340,7 @@ GameObject:
   - component: {fileID: 1964636999}
   - component: {fileID: 1964636998}
   - component: {fileID: 1964637000}
+  - component: {fileID: 1964637001}
   m_Layer: 0
   m_Name: ResourceManager
   m_TagString: Untagged
@@ -1401,6 +1402,36 @@ MonoBehaviour:
   - {fileID: 4182347955297767243, guid: b39f12dbf05abcc45a218335cd1c2296, type: 3}
   resourceManager: {fileID: 1964636998}
   builtBuildings: []
+--- !u!114 &1964637001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964636997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 5298e3a44b13b42459229eb786bf1378, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &2048747083
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,6 +40,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BuildingNumber",
+                    "type": "Value",
+                    "id": "4f2e4b17-d5e7-4f0d-8539-de081d84ab3c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -227,6 +236,61 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ToggleBuildMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57db1413-4a67-4002-8122-6fc7c3045727",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "Scale",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BuildingNumber",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ec26271d-0fde-4374-abba-c26842fee85f",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BuildingNumber",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1d474136-eae5-41da-9953-ca11cfd60ea2",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BuildingNumber",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "298e13e7-6303-4b5b-9ac4-429bd48b257c",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "Scale(factor=4)",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BuildingNumber",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4750b2ff-ac57-4683-bdb8-324705c47d11",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "Scale(factor=5)",
+                    "groups": "Keyboard&Mouse",
+                    "action": "BuildingNumber",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -40,7 +40,7 @@ public class ResourceManager : MonoBehaviour
     private void Update()
     {
         // DEBUG
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             ChangeResource("stone", 5);
         }

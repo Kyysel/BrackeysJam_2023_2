@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -32,13 +33,13 @@ public class BuildingManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F1))
-        {
-            if (canBuild(buildingsAvailable[0]))
-            {
-                Build(buildingsAvailable[0]);
-            }
-        }
+        // if (Input.GetKeyDown(KeyCode.F1))
+        // {
+        //     if (canBuild(buildingsAvailable[0]))
+        //     {
+        //         Build(buildingsAvailable[0]);
+        //     }
+        // }
     }
 
     public void Build(Building building)
@@ -57,5 +58,20 @@ public class BuildingManager : MonoBehaviour
         }
 
         return true;
+    }
+
+    void OnBuildingNumber(InputValue inputValue)
+    {
+        if (HUDController.Instance.hudActive)
+        {
+            float value = inputValue.Get<float>();   
+            if (value != 0)
+            {
+                if (value <= buildingsAvailable.Count && canBuild(buildingsAvailable[(int)value - 1]))
+                {
+                    Build(buildingsAvailable[(int)value-1]);
+                }
+            }
+        }
     }
 }
