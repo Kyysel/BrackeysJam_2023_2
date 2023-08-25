@@ -62,7 +62,7 @@ public class BuildingManager : MonoBehaviour
     {
         builtBuildings.Add(building.Build());
         float x = player.transform.position.x;
-        float y = x/gridWidth - x%gridWidth;
+        float y = x - x%gridWidth + gridWidth/2;
         Instantiate(building.gameObject, new Vector3(y, 0), quaternion.identity);
     }
 
