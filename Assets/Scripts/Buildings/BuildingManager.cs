@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class BuildingManager : MonoBehaviour
 {
     public static BuildingManager Instance;
+    private GameObject player;
     
     public List<Building> buildingsAvailable;
     public ResourceManager resourceManager;
     public List<Building> builtBuildings;
+
+    public float gridWidth = 4.5f;
+    public GameObject buildIndicator;
     
     private void Awake()
     {
@@ -28,23 +33,37 @@ public class BuildingManager : MonoBehaviour
         {
             b.Initialize();
         }
+
+        InitializeGrid();
+        // expensive but who cares ==> gamejam
+        player = FindObjectOfType<PlayerController>().gameObject;
     }
 
     
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.F1))
-        // {
-        //     if (canBuild(buildingsAvailable[0]))
-        //     {
-        //         Build(buildingsAvailable[0]);
-        //     }
-        // }
+        if (HUDController.Instance.hudActive)
+        {
+            buildIndicator.SetActive(true);
+            float x = player.transform.position.x;
+            float y = x - x%gridWidth + gridWidth/2;
+            buildIndicator.transform.position = new Vector3(y, 0.5f);
+        } else {
+            buildIndicator.SetActive(false);
+        }
+    }
+
+    void InitializeGrid()
+    {
+        
     }
 
     public void Build(Building building)
     {
         builtBuildings.Add(building.Build());
+        float x = player.transform.position.x;
+        float y = x/gridWidth - x%gridWidth;
+        Instantiate(building.gameObject, new Vector3(y, 0), quaternion.identity);
     }
 
     public bool canBuild(Building building)

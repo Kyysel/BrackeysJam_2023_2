@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _grappleHeadRb;
     private bool _isGrappling = false;
     private bool _isRecallingGrapple = false;
+
     
     private void Awake()
     {
