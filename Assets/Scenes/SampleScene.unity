@@ -1759,7 +1759,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceSprites: []
-  resourceNames: []
+  resourceDeposits:
+  - {fileID: 8721324697910174416, guid: cb95bdb1edce7c84db889f2404543c35, type: 3}
+  - {fileID: 8721324697910174416, guid: df0fd83af00e6f6488d3b51ac24e380b, type: 3}
+  - {fileID: 8721324697910174416, guid: aa5e40216d1facf41941a48955e22aea, type: 3}
+  resourceDensity: 0.7
   gridOrigin: {x: 300, y: 0}
   gridSize: {x: 30, y: 30}
   gridSpacing: 4.5
