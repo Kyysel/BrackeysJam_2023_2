@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class HUDController : MonoBehaviour
 {
@@ -16,6 +19,10 @@ public class HUDController : MonoBehaviour
     public GameObject buildingPanelUI;
     public GameObject buildingPanelPrefab;
 
+    public GameObject topPanelHUD;
+    public bool hudActive = false;
+    [FormerlySerializedAs("_topPanelHUDTransform")] public Vector3 topPanelHUDTransform;
+
     private void Awake()
     {
         #region set instance
@@ -28,6 +35,7 @@ public class HUDController : MonoBehaviour
 
     private void Start()
     {
+        topPanelHUDTransform = new Vector3(topPanelHUD.transform.localPosition.x, topPanelHUD.transform.localPosition.y);
         resourceManager = ResourceManager.Instance;
         resourceTextDict = new Dictionary<string, TextMeshProUGUI>();
         // create the dictionnary based on ResourceManager's resourceTypes
@@ -37,6 +45,19 @@ public class HUDController : MonoBehaviour
         }
         
         InitializeHUD();
+    }
+
+    void OnToggleBuildMode(InputValue value)
+    {
+        hudActive = !hudActive;
+        if (hudActive)
+        {
+            LeanTween.moveLocal(topPanelHUD, topPanelHUDTransform+Vector3.down*150, 0.2f);
+        }
+        else
+        {
+            LeanTween.moveLocal(topPanelHUD, topPanelHUDTransform, 0.2f);
+        }
     }
 
     #region event subscription in OnEnable/Disable
