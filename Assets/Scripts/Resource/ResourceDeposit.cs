@@ -5,8 +5,13 @@ using UnityEngine;
 public class ResourceDeposit : MonoBehaviour
 {
 
-    public int amount;
     public string resourceName;
+    public int maxAmount;
+    public float minDepth;
+    public float maxDepth;
+    public float minSize;
+    public float maxSize;
+    public float probability;
     
     void Start()
     {
