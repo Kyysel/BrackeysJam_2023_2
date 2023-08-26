@@ -15,6 +15,7 @@ public class BuildingManager : MonoBehaviour
 
     public float gridWidth = 4.5f;
     public GameObject buildIndicator;
+    private BuildIndicator _buildIndicatorUI;
     
     private void Awake()
     {
@@ -34,9 +35,9 @@ public class BuildingManager : MonoBehaviour
             b.Initialize();
         }
 
-        InitializeGrid();
         // expensive but who cares ==> gamejam
         player = FindObjectOfType<PlayerController>().gameObject;
+        _buildIndicatorUI = buildIndicator.GetComponent<BuildIndicator>();
     }
 
     
@@ -51,11 +52,6 @@ public class BuildingManager : MonoBehaviour
         } else {
             buildIndicator.SetActive(false);
         }
-    }
-
-    void InitializeGrid()
-    {
-        
     }
 
     public void Build(Building building)
@@ -81,7 +77,7 @@ public class BuildingManager : MonoBehaviour
 
     void OnBuildingNumber(InputValue inputValue)
     {
-        if (HUDController.Instance.hudActive)
+        if (HUDController.Instance.hudActive && _buildIndicatorUI.valid)
         {
             float value = inputValue.Get<float>();   
             if (value != 0)

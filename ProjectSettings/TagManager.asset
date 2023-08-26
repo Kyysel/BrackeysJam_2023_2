@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ResourceDeposit
   - Worm
+  - Building
   layers:
   - Default
   - TransparentFX
@@ -14,8 +15,8 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
-  - 
+  - Building
+  - BuildingUI
   - 
   - 
   - 
@@ -42,4 +43,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Buildings
+    uniqueID: 1231511807
+    locked: 0
+  - name: BuildUI
+    uniqueID: 127568067
+    locked: 0
+  - name: Player
+    uniqueID: 1781494299
     locked: 0

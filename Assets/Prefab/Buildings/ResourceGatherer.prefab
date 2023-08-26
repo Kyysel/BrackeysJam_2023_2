@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 6792727876890668504}
   - component: {fileID: 6792727876890668507}
   - component: {fileID: 3465014003868228015}
-  m_Layer: 0
+  - component: {fileID: 3208399020932845194}
+  m_Layer: 7
   m_Name: ResourceGatherer
-  m_TagString: Untagged
+  m_TagString: Building
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -71,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1231511807
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -1173700042, guid: 27456e57a946f75419d4ff303d3ea122, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -98,5 +99,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   costsArray: 140000000a000000
-  name: Collector Building
+  buildingName: Collector Building
   icon: {fileID: -1173700042, guid: 27456e57a946f75419d4ff303d3ea122, type: 3}
+  lineRenderer: {fileID: 0}
+  laserTarget: {fileID: 0}
+--- !u!61 &3208399020932845194
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6792727876890668506}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 3}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 4.5, y: 6}
+    newSize: {x: 4.5, y: 2.7}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 4.5, y: 6}
+  m_EdgeRadius: 0
