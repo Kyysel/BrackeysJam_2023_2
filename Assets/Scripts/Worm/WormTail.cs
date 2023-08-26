@@ -10,31 +10,38 @@ public class WormTail : MonoBehaviour
     public Transform targetDir;
     public float targetDist;
     public float smoothSpeed;
-    public Vector3[] segmentPositions;
-    public Vector3[] segmentVelocities;
+    public List<Vector3> segmentPositions;
+    public List<Vector3> segmentVelocities;
+    private Vector3[] segmentVelocitiesArray;
     
     public Transform tailEnd;
-    public GameObject[] bodyParts;
+    public List<GameObject> bodyParts;
     
 
     public void InitializeTail(int length, GameObject segmentPrefab, GameObject parent)
     {
         this.length = length;
-        segmentVelocities = new Vector3[length+1];
-        segmentPositions = new Vector3[length+1];
-        bodyParts = new GameObject[length+1];
+        segmentVelocities = new List<Vector3>(length + 1);
+        segmentVelocitiesArray = new Vector3[length + 1];
+        segmentPositions = new List<Vector3>(length + 1);
+        bodyParts = new List<GameObject>();
+        for (int i=0;i<length+1;i++)
+        {
+            segmentVelocities.Add(Vector3.zero);
+            segmentPositions.Add(Vector3.zero);
+        }
 
         // First body part is the head
-        bodyParts[0] = gameObject.transform.parent.gameObject;
+        bodyParts.Add(gameObject.transform.parent.gameObject);
         for (int i=1; i<length; i++)
         {
             GameObject segment = Instantiate(segmentPrefab, transform.position, Quaternion.identity);
             segment.transform.SetParent(parent.transform, false);
-            bodyParts[i] = segment;
+            bodyParts.Add(segment);
             // Following body parts are the segments
             segment.GetComponent<SegmentRotation>().target = bodyParts[i - 1].transform;
         }
-        bodyParts[length] = tailEnd.gameObject;
+        bodyParts.Add(tailEnd.gameObject);
         tailEnd.GetComponent<SegmentRotation>().target = bodyParts[length - 1].transform;
         
         ResetPos();
@@ -49,7 +56,8 @@ public class WormTail : MonoBehaviour
         for (int i = 1; i <= length; i++)
         {
             Vector3 targetPos = segmentPositions[i - 1] + (segmentPositions[i] - segmentPositions[i - 1]).normalized * targetDist;
-            segmentPositions[i] = Vector3.SmoothDamp(segmentPositions[i], targetPos, ref segmentVelocities[i], smoothSpeed);
+            segmentPositions[i] = Vector3.SmoothDamp(segmentPositions[i], targetPos, ref segmentVelocitiesArray[i], smoothSpeed);
+            segmentVelocities[i] = segmentVelocitiesArray[i];
             bodyParts[i].transform.position = segmentPositions[i];
         }
 
@@ -64,5 +72,19 @@ public class WormTail : MonoBehaviour
             segmentPositions[i] = segmentPositions[i - 1] + targetDir.right * targetDist;
         }
         tailEnd.position = segmentPositions[length];
+    }
+
+    public void RemoveSegment()
+    {
+        GameObject toDestroy = bodyParts[length - 1];
+        bodyParts.RemoveAt(length-1);
+        segmentVelocities.RemoveAt(length-1);
+        segmentPositions.RemoveAt(length-1);
+        length -= 1;
+        segmentVelocitiesArray = segmentVelocities.ToArray();
+        
+        bodyParts[length] = tailEnd.gameObject;
+        tailEnd.GetComponent<SegmentRotation>().target = bodyParts[length - 1].transform;
+        Destroy(toDestroy);
     }
 }
