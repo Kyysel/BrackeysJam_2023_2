@@ -1459,10 +1459,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1410981304}
-  - component: {fileID: 1410981303}
+  - component: {fileID: 1410981305}
   - component: {fileID: 1410981302}
   m_Layer: 0
-  m_Name: MusicTest
+  m_Name: MusicController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1475,44 +1475,189 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1410981301}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1ca5c8fe4d625542a570c0bf354347a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   musicTracks:
-  - name: Test Track
+  - name: Track1
     musicLayers:
-    - layerName: IntroBass
-      audioClip: {fileID: 8300000, guid: 2b2dc92454d4a224ca506c9a40726779, type: 3}
+    - layerName: Layer1 - IntroBass and HH
+      audioClip: {fileID: 8300000, guid: 723e6b1795f6a0e4db6e066bf5e648d6, type: 3}
       floatParametersRanges:
-      - name: Float
-        min: 2
-        max: 10
-        playInRange: 0
+      - name: LayerSelect
+        min: 1
+        max: 1
+        playInRange: 1
       boolParameters: []
-    - layerName: HighHats
-      audioClip: {fileID: 8300000, guid: b33ea6bde3cf50e43990a1318f483498, type: 3}
-      floatParametersRanges: []
-      boolParameters:
-      - name: Play
-        playValue: 1
-    loopLengthInBeats: 16
+    - layerName: Layer2 - CyberpunkBass
+      audioClip: {fileID: 8300000, guid: d655264af72a22942918fd8ff8cd3ed6, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 2
+        max: 2
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer3 - Pluck and Bongos
+      audioClip: {fileID: 8300000, guid: e6341380cab966843ba44ef879cadd55, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 3
+        max: 3
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer4x1 - SynthBassAdd | Voices1
+      audioClip: {fileID: 8300000, guid: 65452c6e04e8d2b43bdbdce85f57cb64, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 4
+        max: 4
+        playInRange: 1
+      - name: Voice
+        min: 1
+        max: 1
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer4x2 - SynthBassAdd | Voices2
+      audioClip: {fileID: 8300000, guid: ab10d4b1338ba1d42bebbc22b471c374, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 4
+        max: 4
+        playInRange: 1
+      - name: Voice
+        min: 2
+        max: 2
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer5x1 - AddStrings | Voices1
+      audioClip: {fileID: 8300000, guid: 9bac095e87106a14480ee1d0e9e1e9ca, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 5
+        max: 5
+        playInRange: 1
+      - name: Voice
+        min: 1
+        max: 1
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer5x2 - AddStrings | Voices2
+      audioClip: {fileID: 8300000, guid: 6b68b5cda9ebc224e83f7975943ad713, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 5
+        max: 5
+        playInRange: 1
+      - name: Voice
+        min: 2
+        max: 2
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer6x1 - HalfKickSnare | Voices1
+      audioClip: {fileID: 8300000, guid: 07c193ea5ba173a46a63f0f87b1a4233, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 6
+        max: 6
+        playInRange: 1
+      - name: Voice
+        min: 1
+        max: 1
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer6x2 - HalfKickSnare | Voices2
+      audioClip: {fileID: 8300000, guid: dfb7de3ae8260574f991fac05f12786d, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 6
+        max: 6
+        playInRange: 1
+      - name: Voice
+        min: 2
+        max: 2
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer7x1 - FullKickSnare | Voices1
+      audioClip: {fileID: 8300000, guid: 05f429ed43257fa40af12e844ee2ad29, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 7
+        max: 7
+        playInRange: 1
+      - name: Voice
+        min: 1
+        max: 1
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer7x2 - FullKickSnare | Voices2
+      audioClip: {fileID: 8300000, guid: b398c0899d9b64a4d94ba1d07ef3ab34, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 7
+        max: 7
+        playInRange: 1
+      - name: Voice
+        min: 2
+        max: 2
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer7x3 - FullKickSnare | Strings1
+      audioClip: {fileID: 8300000, guid: 06010e3ad55d10f40813a0eba1447608, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 7
+        max: 7
+        playInRange: 1
+      - name: Voice
+        min: 3
+        max: 3
+        playInRange: 1
+      boolParameters: []
+    - layerName: Layer7x4 - FullKickSnare | Strings2
+      audioClip: {fileID: 8300000, guid: 705dad1e90a115f4a8b624f755e7277d, type: 3}
+      floatParametersRanges:
+      - name: LayerSelect
+        min: 7
+        max: 7
+        playInRange: 1
+      - name: Voice
+        min: 4
+        max: 4
+        playInRange: 1
+      boolParameters: []
+    loopLengthInBeats: 32
     timeSignature:
       topValue: 4
       botValue: 4
     bpm: 104
     localFloatParameters:
-    - name: Float
-      value: 5
+    - name: LayerSelect
+      value: 6
+    - name: Voice
+      value: 1
     localBoolParameters: []
-  muteMetronome: 0
+  muteMetronome: 1
   gain: 0.5
   globalFloatParameters: []
-  globalBoolParameters:
-  - name: Play
-    playValue: 0
---- !u!82 &1410981303
+  globalBoolParameters: []
+--- !u!4 &1410981304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410981301}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 347.9, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1410981305
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1608,21 +1753,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!4 &1410981304
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1410981301}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 347.9, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1425530736
 GameObject:
   m_ObjectHideFlags: 0
