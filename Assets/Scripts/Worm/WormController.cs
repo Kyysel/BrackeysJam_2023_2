@@ -14,4 +14,22 @@ public class WormController : MonoBehaviour
     {
         GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            TakeDamage();
+        }
+    }
+
+    public void TakeDamage()
+    {
+        length -= 1;
+        GetComponentInChildren<WormTail>().RemoveSegment();
+        if (length < 2)
+        {
+            Destroy(this.gameObject);
+        }
+    }
 }
