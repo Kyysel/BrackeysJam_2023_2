@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _grappleHeadRb;
     private bool _isGrappling = false;
     private bool _isRecallingGrapple = false;
+    public Sprite GrappleOpenSprite;
+    public Sprite GrappleClosedSprite;
+    public SpriteRenderer grappleHeadSpriteRenderer;
 
     
     private void Awake()
@@ -98,12 +101,14 @@ public class PlayerController : MonoBehaviour
     {
         grappleLineRenderer.enabled = true;
         _isGrappling = true;
+        grappleHeadSpriteRenderer.sprite = GrappleOpenSprite;
     }
 
     public void RecallGrapple()
     {
         _isGrappling = false;
         _isRecallingGrapple = true;
+        grappleHeadSpriteRenderer.sprite = GrappleClosedSprite;
     }
     
 }
