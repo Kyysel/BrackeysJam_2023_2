@@ -152,8 +152,8 @@ public class MusicController : MonoBehaviour
                     beatCounter = 1;
                 }
 
-                Debug.Log("Beat: " + curBeat + "/" + curTimeSignature.topValue + "\n" +
-                          "Beat Counter = " + beatCounter);
+                //Debug.Log("Beat: " + curBeat + "/" + curTimeSignature.topValue + "\n" +
+                //          "Beat Counter = " + beatCounter);
 
             }
             if (!muteMetronome)

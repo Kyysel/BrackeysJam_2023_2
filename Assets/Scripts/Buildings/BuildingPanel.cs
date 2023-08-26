@@ -10,6 +10,7 @@ public class BuildingPanel : MonoBehaviour
     public Image icon;
     public Building building;
     public GameObject resourceCostPanel;
+    public Image[] resourceImages;
 
     private void Start()
     {
