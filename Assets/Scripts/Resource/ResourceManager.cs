@@ -39,6 +39,14 @@ public class ResourceManager : MonoBehaviour
 
     private void Update()
     {
+        // add resources for testing when pressing F1
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            foreach (string s in resourceTypes)
+            { 
+                ChangeResource(s, 100);
+            }
+        }
     }
 
     public void ChangeResource(string type, int amount)

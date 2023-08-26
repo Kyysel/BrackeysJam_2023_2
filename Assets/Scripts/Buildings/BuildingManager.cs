@@ -29,6 +29,7 @@ public class BuildingManager : MonoBehaviour
     
     void Start()
     {
+        builtBuildings = new List<Building>();
         resourceManager = ResourceManager.Instance;
         foreach (Building b in buildingsAvailable)
         {
@@ -56,10 +57,10 @@ public class BuildingManager : MonoBehaviour
 
     public void Build(Building building)
     {
-        builtBuildings.Add(building.Build());
         float x = player.transform.position.x;
         float y = x - x%gridWidth + gridWidth/2;
-        Instantiate(building.gameObject, new Vector3(y, 0), quaternion.identity);
+        Building builtBuilding = Instantiate(building.gameObject, new Vector3(y, 0), quaternion.identity).GetComponent<Building>();
+        builtBuildings.Add(builtBuilding.Build(building.costsArray));
     }
 
     public bool canBuild(Building building)

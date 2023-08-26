@@ -4,7 +4,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/* Credits to Blackthornprod for the original script*/
 public class RotateToTarget : MonoBehaviour
 {
     public float rotationSpeed;
@@ -12,6 +11,7 @@ public class RotateToTarget : MonoBehaviour
     public float moveSpeed;
     public float maxSpeed;
     private Rigidbody2D _rb;
+    public WormController wormController;
     
     public GameObject target;
 
@@ -22,15 +22,24 @@ public class RotateToTarget : MonoBehaviour
     
     void FixedUpdate()
     {
+        
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+        
+        if (wormController.onCooldown)
+        {
+            angle = Mathf.Atan2(-1000, 300) * Mathf.Rad2Deg;
+            rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
+            return;
+        }
+        
+        
         direction = target.transform.position - transform.position;
         if (_rb.velocity.magnitude < maxSpeed && direction.magnitude > 1f)
         {
             _rb.AddForce(direction.normalized * moveSpeed);
         }
-        
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotationSpeed * Time.deltaTime);
     }
 }

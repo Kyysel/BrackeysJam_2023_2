@@ -30,7 +30,7 @@ public class ResourceSpawnerManager : MonoBehaviour
             }
         }
         
-        SpawnResources();
+        // SpawnResources();
     }
 
     void SpawnResources()

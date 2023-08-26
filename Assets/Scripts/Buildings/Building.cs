@@ -11,14 +11,17 @@ public class Building : MonoBehaviour
     [FormerlySerializedAs("name")] public string buildingName;
     public Sprite icon;
     
-    public Building Build()
+    
+    public Building Build(List<int> costArray)
     {
+        costsArray = costArray;
+        Initialize();
         foreach (string resource in resourceManager.resourceTypes)
         {
             resourceManager.resourceDict[resource] -= costsDict[resource];
         }
         HUDController.Instance.UpdateResourceHUD();
-        Debug.Log("Building...");
+        Debug.Log("Building " + buildingName);
         return this;
     }
 
@@ -27,9 +30,16 @@ public class Building : MonoBehaviour
         costsDict = new Dictionary<string, int>();
         resourceManager = ResourceManager.Instance;
         
-        for (int i=0; i < costsArray.Count; i++)
+        for (int i=0; i < resourceManager.resourceDict.Count; i++)
         {
-            costsDict.Add(resourceManager.resourceTypes[i], costsArray[i]);
+            try 
+            {
+                costsDict.Add(resourceManager.resourceTypes[i], costsArray[i]);
+            } catch (System.ArgumentException)
+            {
+                costsDict.Add(resourceManager.resourceTypes[i], 0);
+            }
+            
         }
     }
 }

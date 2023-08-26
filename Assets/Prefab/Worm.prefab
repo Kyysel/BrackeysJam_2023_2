@@ -86,6 +86,16 @@ MonoBehaviour:
   targetPos: {x: 0, y: 0, z: 0}
   targetObject: {fileID: 7513707831043198159}
   wormHead: {fileID: 0}
+  wormHeadRb: {fileID: 0}
+  curve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  buildingAttackProbability: 0.3
+  _isAttacking: 0
+  onCooldown: 0
 --- !u!1 &2080591836829630321
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,8 +197,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationSpeed: 5
-  moveSpeed: 10
-  maxSpeed: 130
+  moveSpeed: 15
+  maxSpeed: 110
+  wormController: {fileID: 1420471321164341908}
   target: {fileID: 7513707831043198159}
 --- !u!61 &1269194791890579580
 BoxCollider2D:
