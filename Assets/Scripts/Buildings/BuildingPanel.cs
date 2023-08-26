@@ -8,11 +8,31 @@ using UnityEngine.UI;
 public class BuildingPanel : MonoBehaviour
 {
     public Image icon;
-    public Building building;
-    public GameObject resourceCostPanel;
-    public Image[] resourceImages;
+    //public Building building;
+    //public GameObject resourceCostPanel;
+    public GameObject[] resourcePanels;
 
     private void Start()
+    {
+
+        InitializeBuildingImage();
+        //Initialize cost icons
+        foreach (GameObject go in resourcePanels)
+        {
+            TextMeshProUGUI text = go.GetComponentInChildren<TextMeshProUGUI>();
+
+            print (go.name + "text = " + text.text);
+
+            if (text.text == "0")
+            {
+                print("YEP");
+                go.SetActive(false);
+            }
+        }
+
+    }
+
+    private void InitializeBuildingImage()
     {
         //calculate the size ratio of the icon
         float a = icon.preferredWidth, b = icon.preferredHeight;
@@ -25,8 +45,7 @@ public class BuildingPanel : MonoBehaviour
         float newWidth = (rect.sizeDelta.y / ratio.y) * ratio.x;
 
         //change the Image RectTransform, keeping the biggest size always to 100
-        rect.sizeDelta = a >= b ? new Vector2 (rect.sizeDelta.x, newHeight) : new Vector2(newWidth, rect.sizeDelta.x);
-
+        rect.sizeDelta = a >= b ? new Vector2(rect.sizeDelta.x, newHeight) : new Vector2(newWidth, rect.sizeDelta.x);
     }
 
     //Returns the Greatest Common Denominator between two floats

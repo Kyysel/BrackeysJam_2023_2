@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e555f6e582f9b41aded0dcbf82976b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  costsArray: 19000000000000000000000000000000
+  costsArray: 19000000
   buildingName: BasicBuilding
   icon: {fileID: 1398180523, guid: b507a0c9b61851446b8b3b4da70e5d72, type: 3}
 --- !u!61 &956288021911822348

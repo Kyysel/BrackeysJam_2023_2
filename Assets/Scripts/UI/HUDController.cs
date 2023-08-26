@@ -116,7 +116,15 @@ public class HUDController : MonoBehaviour
             BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();
             panel.icon.sprite = building.icon;
             //TODO add the list of resources need to build
-            
+
+            for (int i = 0; i < building.costsArray.Count; i++)
+            {
+                panel.resourcePanels[i].SetActive(true);
+                TextMeshProUGUI text = panel.resourcePanels[i].GetComponentInChildren<TextMeshProUGUI>();
+                int cost = building.costsArray[i];
+                text.text = cost.ToString();
+            }
+
             buildingPanel.transform.SetParent(buildingPanelUI.transform, false);
         }
         
