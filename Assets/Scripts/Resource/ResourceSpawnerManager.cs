@@ -33,16 +33,6 @@ public class ResourceSpawnerManager : MonoBehaviour
         SpawnResources();
     }
 
-    private void OnDrawGizmos()
-    {
-        // show the grid
-        Gizmos.color = Color.red;
-        for (int i = 0; i < grid.Length; i++)
-        {
-            Gizmos.DrawSphere(grid[i], 0.2f);
-        }
-    }
-
     void SpawnResources()
     {
         int[] gridCopy = new int[grid.Length];

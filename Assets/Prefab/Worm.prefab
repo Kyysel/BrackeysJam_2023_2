@@ -79,6 +79,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   length: 15
   segmentPrefab: {fileID: 2750267846213995914, guid: b3ee8dc37a6240c4c9bcd74c7e8fdbb2, type: 3}
+  mapCenter: {x: 350, y: 0}
+  gridSpacing: 10
 --- !u!1 &2080591836829630321
 GameObject:
   m_ObjectHideFlags: 0
