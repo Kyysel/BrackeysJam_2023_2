@@ -110,7 +110,7 @@ public class HUDController : MonoBehaviour
         foreach (Building building in BuildingManager.Instance.buildingsAvailable)
         {
             GameObject buildingPanel = Instantiate(buildingPanelPrefab, transform);
-            buildingPanel.name = building.name + "Panel";
+            buildingPanel.name = building.buildingName + "Panel";
             
             //create the building panel
             BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();

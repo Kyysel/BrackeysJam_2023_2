@@ -60,9 +60,9 @@ public class ResourceSpawnerManager : MonoBehaviour
                     if (rand < actualProbability)
                     {
                         // spawn a resource
-                       Instantiate(resourceDeposit.gameObject, grid[i], Quaternion.identity);
+                        Vector3 spawnLocation = grid[i] + new Vector2(UnityEngine.Random.Range(-1/2f, 1/2f), UnityEngine.Random.Range(-1f, 1f));
+                       Instantiate(resourceDeposit.gameObject, spawnLocation, Quaternion.identity);
                        gridCopy[i] = 1;
-                       print("Spawned " + resourceDeposit.resourceName + " at " + grid[i].x + ", " + grid[i].y);
                     }
                 }
             }

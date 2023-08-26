@@ -37,8 +37,7 @@ public class PlayerController : MonoBehaviour
             grappleHead.transform.position = grapplePoint.position;
         }
     }
-
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         UpdateGrappleLine();
@@ -101,7 +100,7 @@ public class PlayerController : MonoBehaviour
         _isGrappling = true;
     }
 
-    void RecallGrapple()
+    public void RecallGrapple()
     {
         _isGrappling = false;
         _isRecallingGrapple = true;
