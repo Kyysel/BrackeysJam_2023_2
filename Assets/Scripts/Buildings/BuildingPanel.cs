@@ -21,11 +21,8 @@ public class BuildingPanel : MonoBehaviour
         {
             TextMeshProUGUI text = go.GetComponentInChildren<TextMeshProUGUI>();
 
-            print (go.name + "text = " + text.text);
-
             if (text.text == "0")
             {
-                print("YEP");
                 go.SetActive(false);
             }
         }
