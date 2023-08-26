@@ -1703,6 +1703,7 @@ MonoBehaviour:
     - name: Voice
       value: 1
     localBoolParameters: []
+  useSampleTracking: 0
   muteMetronome: 1
   gain: 0.5
   globalFloatParameters: []
@@ -1731,7 +1732,7 @@ AudioSource:
   m_GameObject: {fileID: 1410981301}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 6986080908857715993, guid: a26f9745250579045807989c3fd70d46, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.511
