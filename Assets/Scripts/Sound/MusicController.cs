@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// Controls the music playback for the game. Assumes you only have one source of non-diagetic music
@@ -13,6 +14,8 @@ public class MusicController : MonoBehaviour
     [Header("Music Setup")]
     [Tooltip("List of all music tracks to be played over the course of the game.")]
     public MusicTrack[] musicTracks;
+    public bool useSampleTracking = true;
+    private float loopTime;
 
     //Variables used during music playback
     private AudioSource audioSource;
@@ -80,9 +83,17 @@ public class MusicController : MonoBehaviour
         double startTick = AudioSettings.dspTime;
         sampleRate = AudioSettings.outputSampleRate;
         nextTick = startTick * sampleRate;
+
+        loopTime = (float)(60 / curBPM) * curTrack.loopLengthInBeats;
         
         //start playback
+        if (!useSampleTracking)
+        {
+            StartCoroutine(StartMusicPlaybackAfterSeconds());
+        }
+            
         PlayLoadedMusicLayers();
+
         beatRunning = true;
 
     }
@@ -98,6 +109,17 @@ public class MusicController : MonoBehaviour
         }
     }
 
+    private IEnumerator StartMusicPlaybackAfterSeconds()
+    {
+        yield return new WaitForSeconds(loopTime);
+
+        LoadAudioClipsToPlay();
+        PlayLoadedMusicLayers();
+
+        StartCoroutine(StartMusicPlaybackAfterSeconds());
+
+    }
+
     /// <summary>
     /// Monitors the output of the audio source, using dspTime to calculate when to play the next clips
     /// </summary>
@@ -105,7 +127,7 @@ public class MusicController : MonoBehaviour
     /// <param name="channels">An int that stores the number of channels of audio data passed to this delegate. </param>
     void OnAudioFilterRead(float[] data, int channels) //beat detection and when to play logic
     {
-        if (!beatRunning)
+        if (!beatRunning || !useSampleTracking)
             return;        
 
         double samplesPerTick = sampleRate * 60.0F / curBPM * 4.0F / curTimeSignature.botValue;
