@@ -11,7 +11,6 @@ public class GrappleController : MonoBehaviour
         // if it collides with a resourceDeposit, add the corresponding resource to resourceDict in ResourceManager
         if (other.CompareTag("ResourceDeposit"))
         {
-            print("collecting resource");
             ResourceDeposit rd = other.GetComponent<ResourceDeposit>();
             ResourceManager.Instance.ChangeResource(rd.resourceName, collectAmount);
             rd.currentAmount -= collectAmount;
@@ -19,6 +18,13 @@ public class GrappleController : MonoBehaviour
             {
                 Destroy(other.gameObject);
             }
+            player.RecallGrapple();
+        }
+        if (other.CompareTag("Worm"))
+        {
+            WormController wc = other.GetComponentInParent<WormController>();
+            ResourceManager.Instance.ChangeResource("wormonium", collectAmount);
+            wc.TakeDamage();
             player.RecallGrapple();
         }
     }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4786691642349908150}
   m_Layer: 0
   m_Name: Target Direction
-  m_TagString: Untagged
+  m_TagString: Worm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1420471321164341908}
   m_Layer: 0
   m_Name: Worm
-  m_TagString: Untagged
+  m_TagString: Worm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,9 +90,10 @@ GameObject:
   - component: {fileID: 2080591836829630320}
   - component: {fileID: 2080591836829630327}
   - component: {fileID: 3821598038552127119}
+  - component: {fileID: 1269194791890579580}
   m_Layer: 0
   m_Name: Worm Head
-  m_TagString: Untagged
+  m_TagString: Worm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,6 +180,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 25
   moveSpeed: 5
+--- !u!61 &1269194791890579580
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080591836829630321}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.24, y: 1.24}
+    newSize: {x: 1.24, y: 1.24}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.24, y: 1.0282173}
+  m_EdgeRadius: 0
 --- !u!1 &4534603773975966244
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,9 +216,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3697740401643965450}
   - component: {fileID: 3219845667940196305}
+  - component: {fileID: 3922227308451911488}
   m_Layer: 0
   m_Name: Worm Tail End
-  m_TagString: Untagged
+  m_TagString: Worm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -263,6 +291,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &3922227308451911488
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4534603773975966244}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.24, y: 1.24}
+    newSize: {x: 1.24, y: 1.24}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.0383402, y: 0.81115746}
+  m_EdgeRadius: 0
 --- !u!1 &6367782610051030021
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +329,7 @@ GameObject:
   - component: {fileID: 664622335703365192}
   m_Layer: 0
   m_Name: WormTail
-  m_TagString: Untagged
+  m_TagString: Worm
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
