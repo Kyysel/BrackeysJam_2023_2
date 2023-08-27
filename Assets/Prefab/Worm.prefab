@@ -58,8 +58,8 @@ RectTransform:
   m_GameObject: {fileID: 2080591836620581671}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 2080591836829630320}
   - {fileID: 3697740401643965450}
@@ -139,6 +139,36 @@ MonoBehaviour:
   buildingAttackProbability: 0.3
   onCooldown: 0
   buildingTarget: {fileID: 0}
+  moveSound:
+    outputAudioMixerGroup: {fileID: 4090882429859984532, guid: a26f9745250579045807989c3fd70d46, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 1
+      volume: 0.275
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 0
+      pitchRandomRange: {x: 0.8, y: 1.1}
+      spatialBlend: 0.533
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: b2a9ef99c56566d408bd56573f5c88e4, type: 3}
+  damageSound:
+    outputAudioMixerGroup: {fileID: 4090882429859984532, guid: a26f9745250579045807989c3fd70d46, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.718
+      randomizeVolume: 0
+      volumeRandomRange: {x: 0.8, y: 1}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 0.8, y: 1.3}
+      spatialBlend: 0.5
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 6531b94e44877724aa082dd8ccdd30bc, type: 3}
 --- !u!222 &1883435961170645674
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -310,6 +340,7 @@ GameObject:
   - component: {fileID: 3697740401643965450}
   - component: {fileID: 3219845667940196305}
   - component: {fileID: 3922227308451911488}
+  - component: {fileID: 866827}
   m_Layer: 0
   m_Name: Worm Tail End
   m_TagString: Worm
@@ -410,6 +441,20 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.0383402, y: 0.81115746}
   m_EdgeRadius: 0
+--- !u!114 &866827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4534603773975966244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79e4fb4a7caa574a825517d87169394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 10
+  target: {fileID: 0}
 --- !u!1 &6367782610051030021
 GameObject:
   m_ObjectHideFlags: 0
@@ -456,8 +501,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetDir: {fileID: 4786691642349908150}
-  targetDist: 1
-  smoothSpeed: 0.001
+  targetDist: 0.75
+  smoothSpeed: 0.01
   segmentPositions: []
   segmentVelocities: []
   tailEnd: {fileID: 3697740401643965450}

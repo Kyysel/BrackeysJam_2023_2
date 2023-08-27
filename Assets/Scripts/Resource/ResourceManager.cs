@@ -14,6 +14,8 @@ public class ResourceManager : MonoBehaviour
 
     public static event Action<string> CollectResourcesEvent;
 
+    public Sound collectResourceSound;
+
     private void Awake()
     {
         #region set instance
@@ -52,6 +54,11 @@ public class ResourceManager : MonoBehaviour
     public void ChangeResource(string type, int amount)
     {
         resourceDict[type] += amount;
+
+        if (amount > 0 && type != "wormonium")
+        {
+            AudioManager.instance.PlayOneshotOnAudioSource(collectResourceSound, AudioManager.instance.transform);
+        }
 
         if (CollectResourcesEvent != null)
         {

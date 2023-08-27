@@ -4,8 +4,7 @@ using UnityEngine.SceneManagement;
 using Vector2 = UnityEngine.Vector2;
 using System.Collections;
 using System.Linq;
-
-
+using Unity.VisualScripting;
 
 /// <summary>
 /// Contains all the logic to playback audio. Currently plays back Sounds and SoundContainers, and eventually music.
@@ -19,6 +18,7 @@ public class AudioManager : MonoBehaviour
     private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
     private List<AverageAudio> averageAudioList = new List<AverageAudio>();
     private List<SoundContainer> activeSoundContainers = new List<SoundContainer>();
+    private List<AudioSource> audioSourcesToDestroy = new List<AudioSource>();
 
     [Tooltip("Default SoundSettings to be applied when a SoundBase has 'Use Default Settings' set to true.")]
     public SoundSettings _defaultSoundSettings;
@@ -78,11 +78,13 @@ public class AudioManager : MonoBehaviour
     {
         var targetAudioSource = target.GetComponent<AudioSource>();
 
-        if (targetAudioSource != null)
+        if (targetAudioSource == null)
         {
-            ApplySoundSettingsToAudioSource(sound, targetAudioSource);
-            targetAudioSource.Play();
+            targetAudioSource = target.AddComponent<AudioSource>();
         }
+
+        ApplySoundSettingsToAudioSource(sound, targetAudioSource);
+        targetAudioSource.Play();
 
     }
 
@@ -100,6 +102,30 @@ public class AudioManager : MonoBehaviour
             soundContainer.shouldPlay = true;
             StartCoroutine(PlaySoundContainer(soundContainer, targetAudioSource));
         }
+
+    }
+
+    public void PlayOneshotOnAudioSource(Sound sound, Transform target)
+    {
+
+        var targetAudioSource = target.GetComponent<AudioSource>();
+
+        if (targetAudioSource == null)
+        {
+            targetAudioSource = target.AddComponent<AudioSource>();
+        }
+
+        targetAudioSource.PlayOneShot(sound.audioClip, sound.soundSettings.volume);
+
+    }
+
+    public void CreateSourceAndPlayOneshot(Sound sound, Transform target)
+    {
+
+        AudioSource targetAudioSource = target.AddComponent<AudioSource>();
+        AudioManager.instance.ApplySoundSettingsToAudioSource(sound, targetAudioSource);
+        targetAudioSource.Play();
+        audioSourcesToDestroy.Add(targetAudioSource);
 
     }
 
@@ -401,6 +427,17 @@ public class AudioManager : MonoBehaviour
                 return;
             }
         }
+
+        foreach (AudioSource audioSource in audioSourcesToDestroy)
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSourcesToDestroy.Remove(audioSource);
+                audioSource.Stop();
+                Destroy(audioSource);
+                return;
+            }
+        }
     }
 
     /// <summary>
@@ -412,6 +449,26 @@ public class AudioManager : MonoBehaviour
 
         instance.averageAudioList.Remove(averageAudio);
         Destroy(averageAudio.gameObject);
+
+    }
+
+    public IEnumerator Fade(AudioSource audioSourceToFade,  float duration, float targetVolume, bool stopOnEnd)
+    {
+
+
+        float timeElapsed = 0;
+
+        while (timeElapsed < duration)
+        {
+            audioSourceToFade.volume = Mathf.Lerp(audioSourceToFade.volume, targetVolume, timeElapsed / duration);
+            timeElapsed += Time.fixedDeltaTime;
+            yield return null;
+        }
+
+        if (stopOnEnd && timeElapsed < duration)
+        {
+            audioSourceToFade.Stop();
+        }
 
     }
 

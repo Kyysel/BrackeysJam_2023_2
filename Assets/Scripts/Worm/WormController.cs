@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,6 +12,7 @@ public class WormController : MonoBehaviour
     public GameObject wormHead;
     private Rigidbody2D _wormHeadRb;
     public int damage = 1;
+    private bool invulnerable;
 
     [Header("Grid")]
     public Vector2 mapCenter;
@@ -32,6 +35,8 @@ public class WormController : MonoBehaviour
     [HideInInspector] public bool onCooldown = false;
 
     [Header("References")] public GameObject buildingTarget;
+
+    public Sound moveSound, damageSound;
     
 
     public void Start()
@@ -40,6 +45,7 @@ public class WormController : MonoBehaviour
         GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
         InitializeGrid();
         NewTarget();
+        AudioManager.instance.PlaySoundOnTarget(moveSound, wormHead.transform);
     }
 
     public WormController(int length, int damage, float buildingAttackProbability)
@@ -136,14 +142,28 @@ public class WormController : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (invulnerable) return;
+
+        AudioManager.instance.CreateSourceAndPlayOneshot(damageSound, wormHead.transform);
+
         length -= damage;
         GetComponentInChildren<WormTail>().RemoveSegment();
         if (length < 2)
         {
             Destroy(this.gameObject);
         }
+
+        invulnerable = true;
+        StartCoroutine(SetInvulnerability());
     }
     
+    //to stop weird collisions dealling all of the damage
+    private IEnumerator SetInvulnerability()
+    {
+        yield return new WaitForSeconds(0.75f);
+        invulnerable = false;
+    }
+
     private void OnDrawGizmos()
     {
         // show the grid

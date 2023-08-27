@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Worm Properties")]
+    [Header("MechaWorm Properties")]
     public int length;
     public GameObject segmentPrefab;
     public int damage = 1;

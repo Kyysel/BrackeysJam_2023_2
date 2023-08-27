@@ -29,8 +29,8 @@ public class ResourceSpawnerManager : MonoBehaviour
                 grid[i] = new Vector2(gridOrigin.x + x * gridSpacing, gridOrigin.y - y * gridSpacing);
             }
         }
-        
-        // SpawnResources();
+
+        //SpawnResources();
     }
 
     void SpawnResources()
