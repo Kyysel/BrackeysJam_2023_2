@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicBuilding : Building
+public class ProductionUpgrade : Upgrade
 {
     // Start is called before the first frame update
     void Start()

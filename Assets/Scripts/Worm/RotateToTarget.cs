@@ -6,12 +6,13 @@ using UnityEngine.InputSystem;
 
 public class RotateToTarget : MonoBehaviour
 {
-    public float rotationSpeed;
-    private Vector2 direction;
+    public WormController wormController;
+    [Header("Movement Properties")]
     public float moveSpeed;
     public float maxSpeed;
+    public float rotationSpeed;
+    private Vector2 direction;
     private Rigidbody2D _rb;
-    public WormController wormController;
     
     public GameObject target;
 

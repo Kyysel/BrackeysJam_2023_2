@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GrappleController : MonoBehaviour
 {
-    public PlayerController player;
+    public OldPlayerController player;
     public int collectAmount;
     void OnTriggerEnter2D(Collider2D other)
     {

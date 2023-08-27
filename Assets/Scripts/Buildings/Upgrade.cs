@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class Building : MonoBehaviour
+public class Upgrade : MonoBehaviour
 {
     private ResourceManager resourceManager;
     public Dictionary<string, int> costsDict;
     public List<int> costsArray;
-    [FormerlySerializedAs("name")] public string buildingName;
+    public string upgradeName;
     public Sprite icon;
     
-    
-    public Building Build(List<int> costArray)
+    public Upgrade Perform(List<int> costArray)
     {
         costsArray = costArray;
         Initialize();
@@ -21,7 +20,7 @@ public class Building : MonoBehaviour
             resourceManager.resourceDict[resource] -= costsDict[resource];
         }
         HUDController.Instance.UpdateResourceHUD();
-        Debug.Log("Building " + buildingName);
+        Debug.Log("Building " + upgradeName);
         return this;
     }
 

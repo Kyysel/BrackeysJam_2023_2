@@ -39,8 +39,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2080591836620581669}
+  - component: {fileID: 9122742172886202477}
   - component: {fileID: 1420471321164341908}
+  - component: {fileID: 1883435961170645674}
   m_Layer: 0
   m_Name: Worm
   m_TagString: Worm
@@ -48,8 +49,8 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2080591836620581669
-Transform:
+--- !u!224 &9122742172886202477
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -57,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 2080591836620581671}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2080591836829630320}
@@ -66,6 +67,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 347.9, y: -2.03}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1420471321164341908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -80,22 +86,67 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   length: 15
   segmentPrefab: {fileID: 2750267846213995914, guid: b3ee8dc37a6240c4c9bcd74c7e8fdbb2, type: 3}
-  mapCenter: {x: 350, y: 0}
-  gridSpacing: 10
-  smoothSpeed: 20
+  wormHead: {fileID: 2080591836829630321}
+  damage: 1
+  mapCenter: {x: 350, y: -2}
+  gridSpacing: 6
+  cameraRatio: 20
+  smoothSpeed: 3
   targetPos: {x: 0, y: 0, z: 0}
   targetObject: {fileID: 7513707831043198159}
-  wormHead: {fileID: 0}
-  wormHeadRb: {fileID: 0}
   curve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.24091822
+      outSlope: 0.24091822
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2697837
+      value: 0.06499581
+      inSlope: 0.47027102
+      outSlope: 0.47027102
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.46368518
+    - serializedVersion: 3
+      time: 0.63148665
+      value: 0.31055778
+      inSlope: 1.4709005
+      outSlope: 1.4709005
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.30147868
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1.8708745
+      outSlope: 1.8708745
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   buildingAttackProbability: 0.3
-  _isAttacking: 0
   onCooldown: 0
+  buildingTarget: {fileID: 0}
+--- !u!222 &1883435961170645674
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080591836620581671}
+  m_CullTransparentMesh: 1
 --- !u!1 &2080591836829630321
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +180,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7361869102333199460}
-  m_Father: {fileID: 2080591836620581669}
+  m_Father: {fileID: 9122742172886202477}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2080591836829630327
@@ -196,10 +247,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bcbfb3e5c0fa0f4d9aa796f243471b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationSpeed: 5
+  wormController: {fileID: 1420471321164341908}
   moveSpeed: 15
   maxSpeed: 110
-  wormController: {fileID: 1420471321164341908}
+  rotationSpeed: 5
   target: {fileID: 7513707831043198159}
 --- !u!61 &1269194791890579580
 BoxCollider2D:
@@ -278,7 +329,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2080591836620581669}
+  m_Father: {fileID: 9122742172886202477}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3219845667940196305
@@ -439,6 +490,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2080591836620581669}
+  m_Father: {fileID: 9122742172886202477}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

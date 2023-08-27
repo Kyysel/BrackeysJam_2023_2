@@ -107,21 +107,21 @@ public class HUDController : MonoBehaviour
             resourcePanel.transform.SetParent(resourcesPanelUI.transform, false);
         }
 
-        foreach (Building building in BuildingManager.Instance.buildingsAvailable)
+        foreach (Upgrade upgrade in UpgradeManager.Instance.upgrades)
         {
             GameObject buildingPanel = Instantiate(buildingPanelPrefab, transform);
-            buildingPanel.name = building.buildingName + "Panel";
+            buildingPanel.name = upgrade.upgradeName + "Panel";
             
             //create the building panel
             BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();
-            panel.icon.sprite = building.icon;
+            panel.icon.sprite = upgrade.icon;
             //TODO add the list of resources need to build
 
-            for (int i = 0; i < building.costsArray.Count; i++)
+            for (int i = 0; i < upgrade.costsArray.Count; i++)
             {
                 panel.resourcePanels[i].SetActive(true);
                 TextMeshProUGUI text = panel.resourcePanels[i].GetComponentInChildren<TextMeshProUGUI>();
-                int cost = building.costsArray[i];
+                int cost = upgrade.costsArray[i];
                 text.text = cost.ToString();
             }
 

@@ -4,41 +4,49 @@ using UnityEngine.Serialization;
 
 public class WormController : MonoBehaviour
 {
-    private BuildingManager b;
+    [Header("Worm Properties")]
     public int length;
     public GameObject segmentPrefab;
+    public GameObject wormHead;
+    private Rigidbody2D _wormHeadRb;
+    public int damage = 1;
 
+    [Header("Grid")]
     public Vector2 mapCenter;
     private Vector2 _gridOrigin;
     private Vector2 _gridSize;
-    public float gridSpacing = 10f;
+    [Range(1,10)] public float gridSpacing = 10f;
     private Vector2[] grid;
-    private float cameraRatio = 20f; //3.5f ratio to 70 units
+    public float cameraRatio = 20f; //3.5f ratio to 70 units
 
+    [Header("Movement Properties")]
     public float smoothSpeed = 20f;
     public Vector3 targetPos;
-    private Vector3 _targetPos;
     public GameObject targetObject;
-    public GameObject wormHead;
-    public Rigidbody2D wormHeadRb;
-
+    public AnimationCurve curve;
+    private Vector3 _targetPos;
     private float _elapsedTime;
     private Vector3 _startPosition;
-    public AnimationCurve curve;
-    
-    public float buildingAttackProbability = 0.3f;
-    
+    [Range(0,1)] public float buildingAttackProbability = 0.3f;
     private bool _isAttacking = false;
-    public bool onCooldown = false;
+    [HideInInspector] public bool onCooldown = false;
+
+    [Header("References")] public GameObject buildingTarget;
     
 
     public void Start()
     {
-        wormHeadRb = wormHead.GetComponent<Rigidbody2D>();
-        b = BuildingManager.Instance;
+        _wormHeadRb = wormHead.GetComponent<Rigidbody2D>();
         GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
         InitializeGrid();
         NewTarget();
+    }
+
+    public WormController(int length, int damage, float buildingAttackProbability)
+    {
+        this.length = length;
+        this.damage = damage;
+        this.buildingAttackProbability = buildingAttackProbability;
     }
 
     void InitializeGrid()
@@ -70,8 +78,8 @@ public class WormController : MonoBehaviour
             {
                 _targetPos = Vector3.zero;
                 targetPos = Vector3.zero;
-                wormHeadRb.gravityScale = 0.5f;
-                wormHeadRb.drag = 0;
+                _wormHeadRb.gravityScale = 0.5f;
+                _wormHeadRb.drag = 0;
                 Invoke("ResetAttackState", 4f);
                 _isAttacking = false;
                 onCooldown = true;
@@ -88,8 +96,8 @@ public class WormController : MonoBehaviour
     void ResetAttackState()
     {
         onCooldown = false;
-        wormHeadRb.gravityScale = 0;
-        wormHeadRb.drag = 1.7f;
+        _wormHeadRb.gravityScale = 0;
+        _wormHeadRb.drag = 1.7f;
         NewTarget();
     }
 
@@ -107,10 +115,9 @@ public class WormController : MonoBehaviour
     {
         // probability to attack a building
         float buildRand = UnityEngine.Random.Range(0f, 1f);
-        if (b.builtBuildings.Count > 0 && buildRand < buildingAttackProbability)
+        if (buildRand < buildingAttackProbability)
         {
-            int buildRand2 = UnityEngine.Random.Range(0, b.builtBuildings.Count);
-            targetPos = b.builtBuildings[buildRand2].transform.position;
+            targetPos = buildingTarget.transform.position;
             _targetPos = wormHead.transform.position;
             _startPosition = _targetPos;
             _elapsedTime = 0;

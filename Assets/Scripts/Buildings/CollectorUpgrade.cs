@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectorBuilding : Building
+public class CollectorUpgrade : Upgrade
 {
     public LineRenderer lineRenderer;
     public Transform laserTarget;
