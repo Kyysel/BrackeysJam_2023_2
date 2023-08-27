@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class LookController : MonoBehaviour
     private AudioSource headAudioSource;
     //private float initVolume;
     private bool volumeIncreasing;
+    private PlayerController _pc;
 
     private void Awake()
     {
@@ -28,6 +30,7 @@ public class LookController : MonoBehaviour
     private void Start()
     {
         AudioManager.instance.PlaySoundOnTarget(playerMoveSound, transform);
+        _pc = GetComponentInParent<PlayerController>();
     }
 
     void FixedUpdate()
@@ -85,4 +88,25 @@ public class LookController : MonoBehaviour
         volumeIncreasing = false;
     }
 
+    
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // if it collides with a resourceDeposit, add the corresponding resource to resourceDict in ResourceManager
+        if (other.CompareTag("ResourceDeposit"))
+        {
+            ResourceDeposit rd = other.GetComponent<ResourceDeposit>();
+            ResourceManager.Instance.ChangeResource(rd.resourceName, _pc.collectAmount);
+            rd.currentAmount -= _pc.collectAmount;
+            if (rd.currentAmount <= 0)
+            {
+                Destroy(other.gameObject);
+            }
+        }
+        if (other.CompareTag("Worm"))
+        {
+            WormController wc = other.GetComponentInParent<WormController>();
+            ResourceManager.Instance.ChangeResource("wormonium", _pc.collectAmount);
+            wc.TakeDamage(_pc.damage);
+        }
+    }
 }

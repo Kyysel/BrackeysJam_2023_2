@@ -8,6 +8,8 @@ public class WormController : MonoBehaviour
 {
     [Header("Worm Properties")]
     public int length;
+    public int resourceCollectAmount;
+    public float growthRate = 0.1f;
     public GameObject segmentPrefab;
     public GameObject wormHead;
     private Rigidbody2D _wormHeadRb;
@@ -37,7 +39,8 @@ public class WormController : MonoBehaviour
     [Header("References")] public GameObject buildingTarget;
 
     public Sound moveSound, damageSound;
-    
+
+    private Dictionary<string, int> _resourceDict;
 
     public void Start()
     {
@@ -46,6 +49,12 @@ public class WormController : MonoBehaviour
         InitializeGrid();
         NewTarget();
         AudioManager.instance.PlaySoundOnTarget(moveSound, wormHead.transform);
+        
+        _resourceDict = new Dictionary<string, int>();
+        foreach (string s in ResourceManager.Instance.resourceTypes)
+        {
+            _resourceDict.Add(s, 0);
+        }
     }
 
     public WormController(int length, int damage, float buildingAttackProbability)
@@ -150,6 +159,11 @@ public class WormController : MonoBehaviour
         GetComponentInChildren<WormTail>().RemoveSegment();
         if (length < 2)
         {
+            // add all the resources it had to the resource manager
+            foreach (KeyValuePair<string, int> entry in _resourceDict)
+            {
+                ResourceManager.Instance.ChangeResource(entry.Key, entry.Value);
+            }
             Destroy(this.gameObject);
         }
 
@@ -162,6 +176,12 @@ public class WormController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.75f);
         invulnerable = false;
+    }
+
+    public void CollectResource(string type, int amount)
+    {
+        _resourceDict[type] += amount;
+        transform.LeanScale(this.transform.localScale + new Vector3(growthRate, growthRate, growthRate), 0.5f);
     }
 
     private void OnDrawGizmos()

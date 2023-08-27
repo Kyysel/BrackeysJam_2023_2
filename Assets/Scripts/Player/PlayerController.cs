@@ -9,9 +9,14 @@ public class PlayerController : MonoBehaviour
     public GameObject segmentPrefab;
     public int damage = 1;
     
+    [Header("Player Stats")]
+    public int collectAmount;
+    
     void Start()
     {
         GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
     }
+    
+    
     
 }

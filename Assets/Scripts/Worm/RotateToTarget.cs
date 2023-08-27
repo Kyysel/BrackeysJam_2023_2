@@ -43,4 +43,18 @@ public class RotateToTarget : MonoBehaviour
             _rb.AddForce(direction.normalized * moveSpeed);
         }
     }
+    
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("ResourceDeposit"))
+        {
+            ResourceDeposit rd = other.GetComponent<ResourceDeposit>();
+            rd.currentAmount -= wormController.resourceCollectAmount;
+            wormController.CollectResource(rd.resourceName, wormController.resourceCollectAmount);
+            if (rd.currentAmount <= 0)
+            {
+                Destroy(other.gameObject);
+            }
+        }
+    }
 }
