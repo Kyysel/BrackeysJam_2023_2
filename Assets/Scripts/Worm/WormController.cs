@@ -41,11 +41,14 @@ public class WormController : MonoBehaviour
     public Sound moveSound, damageSound;
 
     private Dictionary<string, int> _resourceDict;
+    private WormTail _wormTail;
 
     public void Start()
     {
         _wormHeadRb = wormHead.GetComponent<Rigidbody2D>();
-        GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
+        _wormTail = GetComponentInChildren<WormTail>();
+        _wormTail.InitializeTail(length, segmentPrefab, this.gameObject);
+        
         InitializeGrid();
         NewTarget();
         AudioManager.instance.PlaySoundOnTarget(moveSound, wormHead.transform);
@@ -181,7 +184,11 @@ public class WormController : MonoBehaviour
     public void CollectResource(string type, int amount)
     {
         _resourceDict[type] += amount;
-        transform.LeanScale(this.transform.localScale + new Vector3(growthRate, growthRate, growthRate), 0.5f);
+        foreach (GameObject segment in _wormTail.bodyParts)
+        {
+            segment.transform.localScale += new Vector3(growthRate, growthRate, growthRate);
+        }
+        _wormTail.targetDist += growthRate;
     }
 
     private void OnDrawGizmos()
