@@ -24,7 +24,7 @@ public class GrappleController : MonoBehaviour
         {
             WormController wc = other.GetComponentInParent<WormController>();
             ResourceManager.Instance.ChangeResource("wormonium", collectAmount);
-            wc.TakeDamage();
+            wc.TakeDamage(1);
             player.RecallGrapple();
         }
     }

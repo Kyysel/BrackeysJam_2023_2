@@ -281,37 +281,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2080591836829630321, guid: 33773cb9b2e95024f96ad1345dde3d6f, type: 3}
   m_PrefabInstance: {fileID: 2080591837302971051}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &365126059
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 365126060}
-  m_Layer: 0
-  m_Name: Target Position
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &365126060
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 365126059}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 727583783}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &384895086
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,13 +939,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 727583783}
+  - component: {fileID: 727583784}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &727583783
 Transform:
   m_ObjectHideFlags: 0
@@ -991,10 +961,24 @@ Transform:
   m_Children:
   - {fileID: 1414430394}
   - {fileID: 1511579626}
-  - {fileID: 365126060}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &727583784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727583782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0372aaa0d7daaf4aa2b6a881a56200a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  length: 10
+  segmentPrefab: {fileID: 2750267846213995914, guid: b3ee8dc37a6240c4c9bcd74c7e8fdbb2, type: 3}
+  damage: 1
 --- !u!1 &731322178
 GameObject:
   m_ObjectHideFlags: 0
@@ -1930,9 +1914,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1414430394}
   - component: {fileID: 1414430398}
-  - component: {fileID: 1414430397}
   - component: {fileID: 1414430396}
   - component: {fileID: 1414430395}
+  - component: {fileID: 1414430399}
   m_Layer: 0
   m_Name: Worm Head
   m_TagString: Worm
@@ -2003,23 +1987,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.24, y: 1.0282173}
   m_EdgeRadius: 0
---- !u!114 &1414430397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414430393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0bcbfb3e5c0fa0f4d9aa796f243471b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wormController: {fileID: 0}
-  moveSpeed: 15
-  maxSpeed: 110
-  rotationSpeed: 5
-  target: {fileID: 365126059}
 --- !u!212 &1414430398
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2072,6 +2039,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1414430399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414430393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6aee572b4f89304f8c14c68c6aa2fed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 12
+  rotationSpeed: 10
 --- !u!1 &1425530736
 GameObject:
   m_ObjectHideFlags: 0
@@ -2346,6 +2327,7 @@ GameObject:
   - component: {fileID: 1511579626}
   - component: {fileID: 1511579628}
   - component: {fileID: 1511579627}
+  - component: {fileID: 1511579629}
   m_Layer: 0
   m_Name: Worm Tail End
   m_TagString: Worm
@@ -2446,6 +2428,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1511579629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1511579625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79e4fb4a7caa574a825517d87169394, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 10
+  target: {fileID: 0}
 --- !u!1 &1964636997
 GameObject:
   m_ObjectHideFlags: 0

@@ -134,9 +134,9 @@ public class WormController : MonoBehaviour
         _elapsedTime = 0;
     }
 
-public void TakeDamage()
+    public void TakeDamage(int damage)
     {
-        length -= 1;
+        length -= damage;
         GetComponentInChildren<WormTail>().RemoveSegment();
         if (length < 2)
         {
