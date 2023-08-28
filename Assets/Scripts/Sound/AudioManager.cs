@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Vector2 = UnityEngine.Vector2;
 using System.Collections;
 using System.Linq;
 using Unity.VisualScripting;
@@ -119,27 +118,45 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void CreateSourceAndPlayOneshot(Sound sound, Transform target)
+    public void CreateSourceAndPlay(Sound sound, Transform target, bool removeAfterPlay)
     {
 
-        AudioSource targetAudioSource = target.AddComponent<AudioSource>();
-        AudioManager.instance.ApplySoundSettingsToAudioSource(sound, targetAudioSource);
+        AudioSource targetAudioSource = target.GetComponent<AudioSource>();
+        bool added = false;
+
+        if (targetAudioSource == null)
+        {
+            targetAudioSource = target.AddComponent<AudioSource>();
+        } 
+        else if (targetAudioSource.isPlaying)
+        {
+            targetAudioSource = target.AddComponent<AudioSource>();
+            audioSourcesToDestroy.Add(targetAudioSource);
+            added = true;
+        }
+
+        ApplySoundSettingsToAudioSource(sound, targetAudioSource);
         targetAudioSource.Play();
-        audioSourcesToDestroy.Add(targetAudioSource);
+
+        if (removeAfterPlay && !added)
+        {
+            audioSourcesToDestroy.Add(targetAudioSource);
+        }
 
     }
 
     /// <summary>
     /// Create an AudioSource GameObject at a specific position and play the associated Sound. 
     /// </summary>
-    /// <param name="sound">The Sound to be played at a location.</param>
-    /// <param name="vector">The location for the Sound to be played.</param>
-    public void PlaySoundAtPos(Sound sound, Vector2 vector)
+    /// <param name="sound">The Sound to be played at a position.</param>
+    /// <param name="position">The position for the Sound to be played.</param>
+    public void PlaySoundAtPos(Sound sound, Vector2 position)
     {
         if (!SceneManager.GetActiveScene().isLoaded) { return; }
+
         GameObject audioSourceGameObject = new GameObject();
-        audioSourceGameObject.transform.name = $"Play{sound.name}At{vector}Obj";
-        audioSourceGameObject.transform.position = vector;
+        audioSourceGameObject.transform.name = $"Play{sound.name}At{position}Obj";
+        audioSourceGameObject.transform.position = position;
 
         AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
         ApplySoundSettingsToAudioSource(sound, audioSource);
@@ -419,17 +436,29 @@ public class AudioManager : MonoBehaviour
     {
         foreach (SoundBase sb in soundsToDestroyList)
         {
+            if (sb == null)
+            {
+                soundsToDestroyList.Remove(sb);
+                return;
+            }
+
             if (!sb.IsPlaying())
             {
                 soundsToDestroyList.Remove(sb);
                 sb.Stop();
                 sb.DestroyObject();
                 return;
-            }
+            }            
         }
 
         foreach (AudioSource audioSource in audioSourcesToDestroy)
         {
+            if (audioSource == null)
+            {
+                audioSourcesToDestroy.Remove(audioSource);
+                return;
+            }
+
             if (!audioSource.isPlaying)
             {
                 audioSourcesToDestroy.Remove(audioSource);
@@ -438,6 +467,9 @@ public class AudioManager : MonoBehaviour
                 return;
             }
         }
+
+
+        
     }
 
     /// <summary>

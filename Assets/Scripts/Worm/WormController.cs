@@ -156,10 +156,9 @@ public class WormController : MonoBehaviour
     {
         if (invulnerable) return;
 
-        AudioManager.instance.CreateSourceAndPlayOneshot(damageSound, wormHead.transform);
-
         length -= damage;
         GetComponentInChildren<WormTail>().RemoveSegment();
+
         if (length < 2)
         {
             // add all the resources it had to the resource manager
@@ -167,7 +166,15 @@ public class WormController : MonoBehaviour
             {
                 ResourceManager.Instance.ChangeResource(entry.Key, entry.Value);
             }
+
+            AudioManager.instance.PlaySoundAtPos(damageSound, transform.position);
+            StopAllCoroutines();
             Destroy(this.gameObject);
+            return;
+
+        } else
+        {
+            AudioManager.instance.CreateSourceAndPlay(damageSound, wormHead.transform, false);
         }
 
         invulnerable = true;
