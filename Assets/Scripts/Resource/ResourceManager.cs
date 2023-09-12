@@ -24,10 +24,7 @@ public class ResourceManager : MonoBehaviour
         else
             Destroy(this);
         #endregion
-    }
-
-    private void Start()
-    {
+        
         if (resourceTypes.Length != resourceImages.Length)
         {
             Debug.LogError("Resource types and images are not the same length!");

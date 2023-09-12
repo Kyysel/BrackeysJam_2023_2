@@ -144,11 +144,11 @@ MonoBehaviour:
   resourceName: steel
   maxAmount: 20
   currentAmount: 0
-  minDepth: 10
-  maxDepth: 30
+  minDepth: 15
+  maxDepth: 40
   minSize: 0
   maxSize: 0
-  probability: 0.3
+  probability: 0.4
 --- !u!222 &3432598701898349907
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -11,17 +11,17 @@ public class Upgrade : MonoBehaviour
     public string upgradeName;
     public Sprite icon;
     
-    public Upgrade Perform(List<int> costArray)
+    public void Perform()
     {
-        costsArray = costArray;
-        Initialize();
         foreach (string resource in resourceManager.resourceTypes)
         {
             resourceManager.resourceDict[resource] -= costsDict[resource];
         }
+        UpgradeManager.Instance.level++;
         HUDController.Instance.UpdateResourceHUD();
         Debug.Log("Building " + upgradeName);
-        return this;
+        
+        //TODO update the costs
     }
 
     public void Initialize()
@@ -41,4 +41,6 @@ public class Upgrade : MonoBehaviour
             
         }
     }
+    
+    
 }

@@ -12,6 +12,8 @@ public class UpgradeManager : MonoBehaviour
     public ResourceManager resourceManager;
     
     public List<Upgrade> upgrades;
+    
+    public int level = 0;
 
     
     private void Awake()
@@ -44,16 +46,16 @@ public class UpgradeManager : MonoBehaviour
 
     void OnBuildingNumber(InputValue inputValue)
     {
-        // if (HUDController.Instance.hudActive && _buildIndicatorUI.valid)
-        // {
-        //     float value = inputValue.Get<float>();   
-        //     if (value != 0)
-        //     {
-        //         if (value <= buildingsAvailable.Count && canUpgrade(buildingsAvailable[(int)value - 1]))
-        //         {
-        //             Upgrade(buildingsAvailable[(int)value-1]);
-        //         }
-        //     }
-        // }
+        if (HUDController.Instance.hudActive)
+        {
+            float value = inputValue.Get<float>();   
+            if (value != 0)
+            {
+                if (value <= upgrades.Count && canUpgrade(upgrades[(int)value - 1]))
+                {
+                    upgrades[(int)value-1].Perform();
+                }
+            }
+        }
     }
 }

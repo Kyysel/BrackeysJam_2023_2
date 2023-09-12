@@ -11,6 +11,8 @@ public class HUDController : MonoBehaviour
 
     public static HUDController Instance;
     private ResourceManager resourceManager;
+
+    public TextMeshProUGUI levelIndicatorUI;
     
     public Dictionary<string, TextMeshProUGUI> resourceTextDict;
     public GameObject resourcePanelPrefab;
@@ -84,6 +86,7 @@ public class HUDController : MonoBehaviour
         {
             resourceTextDict[resource].text = resourceManager.resourceDict[resource].ToString();
         }
+        levelIndicatorUI.text = "Level : " + UpgradeManager.Instance.level;
     }
 
     /**
@@ -115,6 +118,7 @@ public class HUDController : MonoBehaviour
             //create the building panel
             BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();
             panel.icon.sprite = upgrade.icon;
+            
             //TODO add the list of resources need to build
 
             for (int i = 0; i < upgrade.costsArray.Count; i++)

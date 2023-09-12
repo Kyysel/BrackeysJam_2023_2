@@ -21,7 +21,7 @@ public class WormController : MonoBehaviour
     private Vector2 _gridOrigin;
     private Vector2 _gridSize;
     [Range(1,10)] public float gridSpacing = 10f;
-    private Vector2[] grid;
+    private Vector2[] _grid;
     public float cameraRatio = 20f; //3.5f ratio to 70 units
 
     [Header("Movement Properties")]
@@ -74,12 +74,12 @@ public class WormController : MonoBehaviour
             (int)Math.Ceiling((mapCenter.x - _gridOrigin.x) * 2 / (2 * gridSpacing)));
 
         //initialize the grid downwards
-        grid = new Vector2[(int)((_gridSize.x) * (_gridSize.y))];
+        _grid = new Vector2[(int)((_gridSize.x) * (_gridSize.y))];
         for (int i = 0, y = 0; y < _gridSize.y; y++)
         {
             for (int x = 0; x < _gridSize.x; x++, i++)
             {
-                grid[i] = new Vector2(_gridOrigin.x + x * gridSpacing, _gridOrigin.y - y * gridSpacing);
+                _grid[i] = new Vector2(_gridOrigin.x + x * gridSpacing, _gridOrigin.y - y * gridSpacing);
             }
         }
     }
@@ -145,8 +145,8 @@ public class WormController : MonoBehaviour
         }
         
         // select a random point on the grid
-        int rand = UnityEngine.Random.Range(0, grid.Length);
-        targetPos = grid[rand];
+        int rand = UnityEngine.Random.Range(0, _grid.Length);
+        targetPos = _grid[rand];
         _targetPos = wormHead.transform.position;
         _startPosition = _targetPos;
         _elapsedTime = 0;
@@ -202,9 +202,9 @@ public class WormController : MonoBehaviour
     {
         // show the grid
         Gizmos.color = Color.yellow;
-        for (int i = 0; i < grid.Length; i++)
+        for (int i = 0; i < _grid.Length; i++)
         {
-            Gizmos.DrawSphere(grid[i], 0.2f);
+            Gizmos.DrawSphere(_grid[i], 0.2f);
         }
 
         Gizmos.color = Color.red;

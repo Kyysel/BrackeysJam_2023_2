@@ -148,7 +148,7 @@ MonoBehaviour:
   maxDepth: 60
   minSize: 0
   maxSize: 0
-  probability: 0.5
+  probability: 0.3
 --- !u!222 &3432598701898349907
 CanvasRenderer:
   m_ObjectHideFlags: 0
