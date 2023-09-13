@@ -12,7 +12,7 @@ public class LookController : MonoBehaviour
     private Vector2 direction;
 
     [Header("Sounds")]
-    public Sound playerMoveSound;
+    public BasicSound playerMoveSound;
     private AudioSource headAudioSource;
     //private float initVolume;
     private bool volumeIncreasing;
@@ -29,7 +29,7 @@ public class LookController : MonoBehaviour
 
     private void Start()
     {
-        AudioManager.instance.PlaySoundOnTarget(playerMoveSound, transform);
+        AudioManager.instance.PlaySoundBaseOnTarget(playerMoveSound, transform, false);
         _pc = GetComponentInParent<PlayerController>();
     }
 
@@ -66,7 +66,7 @@ public class LookController : MonoBehaviour
         if (headAudioSource.volume < playerMoveSound.soundSettings.volume)
         {
             StopAllCoroutines();
-            StartCoroutine(AudioManager.instance.Fade(headAudioSource, 0.5f, playerMoveSound.soundSettings.volume, false));
+            StartCoroutine(AudioManager.instance.FadeMusic(headAudioSource, 0.5f, playerMoveSound.soundSettings.volume, false));
         }
         
         volumeIncreasing = true;
@@ -82,7 +82,7 @@ public class LookController : MonoBehaviour
         if (headAudioSource.volume > 0)
         {
             StopAllCoroutines();
-            StartCoroutine(AudioManager.instance.Fade(headAudioSource, 1f, 0, false));
+            StartCoroutine(AudioManager.instance.FadeMusic(headAudioSource, 1f, 0, false));
         }
         
         volumeIncreasing = false;
@@ -95,18 +95,23 @@ public class LookController : MonoBehaviour
         if (other.CompareTag("ResourceDeposit"))
         {
             ResourceDeposit rd = other.GetComponent<ResourceDeposit>();
-            ResourceManager.Instance.ChangeResource(rd.resourceName, _pc.collectAmount);
-            rd.currentAmount -= _pc.collectAmount;
-            if (rd.currentAmount <= 0)
-            {
-                Destroy(other.gameObject);
-            }
+            rd.CollectResource(_pc.collectAmount);
+            CameraShake.instance.ShakeOnce(0.3f, 0.2f, 0.1f);
+
         }
         if (other.CompareTag("Worm"))
         {
             WormController wc = other.GetComponentInParent<WormController>();
             ResourceManager.Instance.ChangeResource("wormonium", _pc.collectAmount);
             wc.TakeDamage(_pc.damage);
+            CameraShake.instance.ShakeOnce(0.5f, 0.2f, 0.2f);
         }
     }
+
+    public void PlayCollectionAnimation(ParticleSystem particleSystem)
+    {
+        ParticleSystem aniObject = Instantiate(particleSystem, transform.position, particleSystem.transform.rotation);
+        Destroy(aniObject.gameObject, particleSystem.main.duration);
+    }
+
 }

@@ -146,9 +146,31 @@ MonoBehaviour:
   currentAmount: 0
   minDepth: 15
   maxDepth: 40
-  minSize: 0
-  maxSize: 0
+  minSize: 0.3
   probability: 0.4
+  spriteOptions:
+  - {fileID: 21300000, guid: 26604d844a3a9704db2a824994c21b52, type: 3}
+  - {fileID: 21300000, guid: cb7032fe78823f5458a74322b6aeaf0d, type: 3}
+  - {fileID: 21300000, guid: 2525870e8bca57c4a89fd8a697c45d9b, type: 3}
+  collectParticleSystem: {fileID: 1219229014164059294, guid: 38f9922b5dcf2084c8424f98ab193c03, type: 3}
+  collectSound:
+    outputAudioMixerGroup: {fileID: 4090882429859984532, guid: a26f9745250579045807989c3fd70d46, type: 2}
+    useDefaultSettings: 0
+    soundSettings:
+      priority: 128
+      loop: 0
+      volume: 0.504
+      randomizeVolume: 1
+      volumeRandomRange: {x: 0.35, y: 0.5}
+      pitch: 1
+      randomizePitch: 1
+      pitchRandomRange: {x: 1, y: 1.1}
+      spatialBlend: 0
+      spread: 0
+      bufferTime: 0
+      lastTriggeredTime: 50000
+    audioSourceInUse: {fileID: 0}
+    audioClip: {fileID: 8300000, guid: 4ff5e09be90065b4db1896805b653c94, type: 3}
 --- !u!222 &3432598701898349907
 CanvasRenderer:
   m_ObjectHideFlags: 0

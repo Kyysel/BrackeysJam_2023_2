@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Linq;
-using Unity.VisualScripting;
+
 
 /// <summary>
 /// Contains all the logic to playback audio. Currently plays back Sounds and SoundContainers, and eventually music.
@@ -12,6 +12,9 @@ public class AudioManager : MonoBehaviour
 {
     //Singleton Pattern
     public static AudioManager instance;
+    public bool printDebugMessages;
+    public bool usePlayerAudioListener;
+    private GameObject audioListenerGameObject;
 
     //Lists of objects to be destroyed or affected
     private List<SoundBase> soundsToDestroyList = new List<SoundBase>();
@@ -26,18 +29,96 @@ public class AudioManager : MonoBehaviour
     private System.Random random = new System.Random();
 
     /// <summary>
-    /// Implementing the singleton pattern. 
+    /// Implementing the singleton pattern and DontDestroyOnLoad. 
     /// </summary>
     private void Awake()
     {
         if (instance != null)
         {
-            Debug.LogError("There's more than one AudioManager!" + transform + " - " + instance);
+            Debug.LogWarning("There's more than one AudioManager! " + transform + " - " + instance);
             Destroy(gameObject);
             return;
         }
 
         instance = this;
+        DontDestroyOnLoad(this.gameObject);
+
+        transform.position = new Vector3(0, 0, 0);
+
+        audioListenerGameObject = new GameObject();
+        audioListenerGameObject.name = "AudioListenerGameObject";
+        audioListenerGameObject.AddComponent<AudioListener>();
+        audioListenerGameObject.transform.SetParent(transform);
+
+    }
+
+    private void OnEnable()
+    {
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
+    }
+    private void OnDisable()
+    {
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+
+        //StartCoroutine(SetUpAudioListeners());
+        SetUpAudioListeners();
+    }
+
+    public void ResetAudioListener()
+    {
+        audioListenerGameObject.transform.SetParent(transform);
+    }
+
+    private void SetUpAudioListeners()
+    {
+        AudioListener[] audiolistenersInScene = FindObjectsOfType<AudioListener>();
+
+        foreach (AudioListener audi in audiolistenersInScene)
+        {
+            if (audi.gameObject.name != "AudioListenerGameObject")
+            {
+                if (printDebugMessages) print("destroying listener on " + audi.gameObject.name);
+                Destroy(audi);
+            }
+        }
+
+        if (usePlayerAudioListener)
+        {
+
+            GameObject player = null;
+
+            try
+            {
+                player = GameObject.Find("Player");
+                if (printDebugMessages) print("Finding player...!");
+            }
+            catch
+            {
+                if (printDebugMessages) print("Player not found!");
+            }
+
+            if (player != null)
+            {
+                if (printDebugMessages) print("Player found!");
+                audioListenerGameObject.transform.SetParent(player.transform, false);
+
+            }
+
+        }
+        //else
+        //{
+        //    audioListenerGameObject.transform.SetParent(Camera.main.transform, false);
+        //}
+
+        audioListenerGameObject.transform.position = new Vector3(0, 0, 5);
+
     }
 
     /// <summary>
@@ -50,176 +131,149 @@ public class AudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Play an AudioClip on an AudioSource attatched to an IActor. This method uses the settings of the AudioSource already on the IActor, and does not apply any other SoundSettings.
+    /// Starts a SoundBase on an AudioSource.  
     /// </summary>
-    /// <param name="audioClip">The AudioClip to be played. </param>
+    /// <param name="soundBase">The SoundContainer to start. </param>
     /// <param name="target">The IActor to get the AudioSource from. </param>
-    public void PlaySoundOnTarget(AudioClip audioClip, Transform target)
+    public void PlaySoundBaseOnTarget(SoundBase soundBase, Transform target, bool makeUnique)
     {
-        Debug.LogWarning("You are using a depreciated method of playing audio. Please use Sounds instead of AudioClips to play audio.");
 
-        var targetAudioSource = target.GetComponent<AudioSource>();
+        if (!SoundShouldPlay(soundBase)) { return; }
 
-        if (targetAudioSource != null)
-        {
-            targetAudioSource.clip = audioClip;
-            targetAudioSource.Play();
-        }
+        PlaySoundBaseOnAudioSource(soundBase, GetAudioSourceFromTarget(target, makeUnique));
 
     }
 
-    /// <summary>
-    /// Play a Sound on an AudioSource attatched to an IActor. 
-    /// </summary>
-    /// <param name="sound">The Sound to be played. </param>
-    /// <param name="target">The IActor to get the AudioSource from. </param>
-    public void PlaySoundOnTarget(Sound sound, Transform target)
+    public void PlayOneshotOnTarget(BasicSound sound, Transform target)
     {
-        var targetAudioSource = target.GetComponent<AudioSource>();
 
-        if (targetAudioSource == null)
-        {
-            targetAudioSource = target.AddComponent<AudioSource>();
-        }
+        if (!SoundShouldPlay(sound)) { return; }
 
-        ApplySoundSettingsToAudioSource(sound, targetAudioSource);
-        targetAudioSource.Play();
+        PlayOneshot(sound, GetAudioSourceFromTarget(target, false));
 
     }
 
-    /// <summary>
-    /// Starts a SoundContainer on an AudioSource attatched to an IActor.  
-    /// </summary>
-    /// <param name="soundContainer">The SoundContainer to start. </param>
-    /// <param name="target">The IActor to get the AudioSource from. </param>
-    public void PlaySoundOnTarget(SoundContainer soundContainer, Transform target)
-    {
-        var targetAudioSource = target.GetComponent<AudioSource>();
-
-        if (targetAudioSource != null)
-        {
-            soundContainer.shouldPlay = true;
-            StartCoroutine(PlaySoundContainer(soundContainer, targetAudioSource));
-        }
-
-    }
-
-    public void PlayOneshotOnAudioSource(Sound sound, Transform target)
-    {
-
-        var targetAudioSource = target.GetComponent<AudioSource>();
-
-        if (targetAudioSource == null)
-        {
-            targetAudioSource = target.AddComponent<AudioSource>();
-        }
-
-        targetAudioSource.PlayOneShot(sound.audioClip, sound.soundSettings.volume);
-
-    }
-
-    public void CreateSourceAndPlay(Sound sound, Transform target, bool removeAfterPlay)
+    private AudioSource GetAudioSourceFromTarget(Transform target, bool makeUnique)
     {
 
         AudioSource targetAudioSource = target.GetComponent<AudioSource>();
-        bool added = false;
 
-        if (targetAudioSource == null)
+        if (targetAudioSource == null || (makeUnique && targetAudioSource.isPlaying))
         {
-            targetAudioSource = target.AddComponent<AudioSource>();
-        } 
-        else if (targetAudioSource.isPlaying)
-        {
-            targetAudioSource = target.AddComponent<AudioSource>();
-            audioSourcesToDestroy.Add(targetAudioSource);
-            added = true;
+            targetAudioSource = target.gameObject.AddComponent<AudioSource>();
+
+            if (makeUnique)
+            {
+                audioSourcesToDestroy.Add(targetAudioSource);
+            }
+
         }
 
-        ApplySoundSettingsToAudioSource(sound, targetAudioSource);
-        targetAudioSource.Play();
-
-        if (removeAfterPlay && !added)
-        {
-            audioSourcesToDestroy.Add(targetAudioSource);
-        }
-
+        return targetAudioSource;
     }
 
     /// <summary>
-    /// Create an AudioSource GameObject at a specific position and play the associated Sound. 
-    /// </summary>
-    /// <param name="sound">The Sound to be played at a position.</param>
-    /// <param name="position">The position for the Sound to be played.</param>
-    public void PlaySoundAtPos(Sound sound, Vector2 position)
-    {
-        if (!SceneManager.GetActiveScene().isLoaded) { return; }
-
-        GameObject audioSourceGameObject = new GameObject();
-        audioSourceGameObject.transform.name = $"Play{sound.name}At{position}Obj";
-        audioSourceGameObject.transform.position = position;
-
-        AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-        ApplySoundSettingsToAudioSource(sound, audioSource);
-        sound.audioSourceInUse = audioSource;
-        audioSource.Play();
-
-        soundsToDestroyList.Add(sound);
-    }
-
-    /// <summary>
-    /// Create an AudioSource GameObject at a specific position and start the associated SoundContainer. 
+    /// Create an AudioSource GameObject at a specific position and play a sound. 
     /// </summary>
     /// <param name="soundContainer">The SoundContainer to be started at a location.</param>
     /// <param name="vector">The location for the SoundContainer to be played.</param>
-    public void PlaySoundAtPos(SoundContainer soundContainer, Vector2 vector)
+    public void PlaySoundBaseAtPos(SoundBase soundBase, Vector2 vector, string objCalledFrom)
     {
-        if (!SceneManager.GetActiveScene().isLoaded) { return; }
+
+        if (!SoundShouldPlay(soundBase)) { return; }
+
         GameObject audioSourceGameObject = new GameObject();
-        audioSourceGameObject.transform.name = $"Play{soundContainer.name}At{vector}Obj";
+        audioSourceGameObject.transform.name = $"Playing {soundBase.name} at {vector}. Created by {objCalledFrom}"; //can be deleted for final builds
         audioSourceGameObject.transform.position = vector;
 
         AudioSource audioSource = audioSourceGameObject.AddComponent<AudioSource>();
-        soundContainer.audioSourceInUse = audioSource;
-        StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
+        PlaySoundBaseOnAudioSource(soundBase, audioSource);
 
-        soundsToDestroyList.Add(soundContainer);
+        soundsToDestroyList.Add(soundBase);
     }
 
-    /// <summary>
-    /// Get the average audio location of multiple projectiles and create a gameobject with an audio source at the average position to play. 
-    /// </summary>
-    /// <param name="transforms">The list of projectiles to find the average position of. </param>
-    /// <param name="sound">The audioclip to play at the location. </param>
-    /// <param name="averageOrFirst">Determines whether to get the average location of all projectiles or just use one projectile</param>
-    public void PlaySoundAtAveragePos(List<Transform> transforms, Sound sound, bool averageOrFirst)
+    private void PlaySoundBaseOnAudioSource(SoundBase soundBase, AudioSource audioSource)
     {
 
-        if (averageOrFirst == true) //play at average position
+        soundBase.audioSourceInUse = audioSource;
+
+        switch (soundBase.GetSoundType())
         {
-            //Create a GameObject and attach an AverageAudio component to it
-            AverageAudio averageAudioGameObject = new GameObject().AddComponent<AverageAudio>();
-            averageAudioGameObject.transform.name = $"AverageAudio({sound.name})GameObj";
+            case SoundType.Sound:
+                {
 
-            //Initialize the AverageAudio component and play the sound. The AverageAudio component keeps the AudioSource's GameObject at the average location of the projectiles
-            AverageAudio averageAudioComponent = averageAudioGameObject.GetComponent<AverageAudio>();
-            averageAudioComponent.SetTransformsAndSound(transforms, sound);
-            averageAudioGameObject.transform.position = averageAudioGameObject.TryGetAveragePos();
-            averageAudioComponent.PlayAverageAudio();
+                    BasicSound sound = (BasicSound)soundBase;
+                    PlaySound(sound, audioSource);
 
-            averageAudioList.Add(averageAudioGameObject);
+                    break;
+                }
+
+            case SoundType.SoundContainer:
+                {
+
+                    SoundContainer container = (SoundContainer)soundBase;
+                    container.shouldPlay = true;
+                    StartCoroutine(PlaySoundContainer(container, audioSource));
+
+                    break;
+                }
+
+            default:
+                {
+                    print("Default case in AudioManager.PlaySoundBaseOnAudioSource reached!\nSoundBases can only be of type 'BasicSound' or 'SoundContainer'");
+                    break;
+                }
+        }
+    }
+
+    private void PlaySound(BasicSound sound, AudioSource audioSource)
+    {
+        if (audioSource.isPlaying)
+        {
+            GameObject go = audioSource.gameObject;
+            audioSource = go.AddComponent<AudioSource>();
 
         }
 
-        else //play at first projectile
-        {
-            
-            if (transforms.Count == 0 || transforms[0] == null)
-                return; 
+        audioSource.clip = sound.audioClip;
+        ApplySoundSettingsToAudioSource(sound, audioSource);
 
-            var audioSource = transforms[0].gameObject.AddComponent<AudioSource>();
-            ApplySoundSettingsToAudioSource(sound, audioSource);
+        if (sound.audioClip != null)
             audioSource.Play();
-        }
+        else
+            print($"Tried to play a sound ({sound.name}) on {audioSource.gameObject.name}.");
+
+    }
+    private void PlayOneshot(BasicSound sound, AudioSource audioSource)
+    {
+
+        AudioSource newAudioSource = audioSource;
+
+        float volume = sound.GetVolume();
+
+        if (sound.audioClip != null)
+            newAudioSource.PlayOneShot(sound.audioClip, volume);
+        else
+            print($"Tried to play a oneshot sound ({sound.name}) on {newAudioSource.gameObject.name}.");
+
+    }
+
+    public AverageAudio CreateAndPlayAverageAudioSource(BasicSound sound)
+    {
+        if (!sound.IsValid()) return null;
+
+        GameObject averageAudioGameObject = new GameObject();
+        averageAudioGameObject.transform.name = $"AverageAudio ({sound.name}) GameObj";
+        AudioSource audioSourceAdded = averageAudioGameObject.AddComponent<AudioSource>();
+
+        AverageAudio averageAudio = averageAudioGameObject.AddComponent<AverageAudio>();
+        averageAudio.audioSource = audioSourceAdded;
+        averageAudio.sound = sound;
+        PlaySoundBaseOnAudioSource(averageAudio.sound, audioSourceAdded);
+        soundsToDestroyList.Add(sound);
+
+        return averageAudio;
+
     }
 
     /// <summary>
@@ -231,6 +285,13 @@ public class AudioManager : MonoBehaviour
     {
 
         int soundsLength = soundContainer.clipsInContainer.Length;
+
+        if (soundsLength < 1)
+        {
+            print($"Tried to play a sound container ({soundContainer.name}) on {audioSource.gameObject.name}.");
+            yield break;
+        }
+
         soundContainer.isPlaying = true;
         activeSoundContainers.Add(soundContainer);
 
@@ -247,7 +308,7 @@ public class AudioManager : MonoBehaviour
                     float awaitTime = audioClip.length;
                     yield return new WaitForSeconds(awaitTime);
 
-                    if (!soundContainer.shouldPlay)
+                    if (!soundContainer.shouldPlay || !soundContainer.IsValid())
                         break;
                 }
 
@@ -270,7 +331,7 @@ public class AudioManager : MonoBehaviour
                     clips.Remove(clipToPlay);
                     yield return new WaitForSeconds(awaitTime);
 
-                    if (!soundContainer.shouldPlay)
+                    if (!soundContainer.shouldPlay || !soundContainer.IsValid())
                         break;
                 }
 
@@ -288,7 +349,7 @@ public class AudioManager : MonoBehaviour
                     audioSource.Play();
                     yield return new WaitForSeconds(awaitTime);
 
-                    if (!soundContainer.shouldPlay)
+                    if (!soundContainer.shouldPlay || !soundContainer.IsValid())
                         break;
                 }
 
@@ -297,11 +358,25 @@ public class AudioManager : MonoBehaviour
             //Plays only one random AudioClip in the SoundContainer
             case SoundContainerType.RandomOneshot:
 
+                if (!soundContainer.IsValid())
+                {
+                    print($"No clips found in {soundContainer.name} trying to play on {audioSource.gameObject.name}");
+                    break;
+                }
+
                 soundContainer.loopContainer = false;
 
                 AudioClip oneshotToPlay = soundContainer.clipsInContainer[random.Next(soundsLength)];
-                ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
+
+                if (!audioSource.isPlaying)
+                {
+                    ApplySoundSettingsToAudioSource(soundContainer, audioSource, oneshotToPlay);
+                }
+
                 audioSource.PlayOneShot(oneshotToPlay);
+
+                float clipLength = oneshotToPlay.length;
+                StartCoroutine(HandleRandomOneShotPlayback(soundContainer, clipLength));
 
                 break;
 
@@ -309,10 +384,16 @@ public class AudioManager : MonoBehaviour
 
         if (soundContainer.loopContainer)
             StartCoroutine(PlaySoundContainer(soundContainer, audioSource));
-        else
+        else if (soundContainer.containerType != SoundContainerType.RandomOneshot)
         {
             soundContainer.isPlaying = false;
         }
+    }
+
+    private IEnumerator HandleRandomOneShotPlayback(SoundContainer soundContainer, float clipLength)
+    {
+        yield return new WaitForSeconds(clipLength);
+        soundContainer.isPlaying = false;
     }
 
     /// <summary>
@@ -320,10 +401,14 @@ public class AudioManager : MonoBehaviour
     /// </summary>
     /// <param name="sound">The Sound to get the settings from.</param>
     /// <param name="audioSource">The AudioSource to apply the settings onto.</param>
-    public void ApplySoundSettingsToAudioSource(Sound sound, AudioSource audioSource)
+    public void ApplySoundSettingsToAudioSource(BasicSound sound, AudioSource audioSource)
     {
+
+        if (!SoundShouldPlay(sound)) { return; }
+
         audioSource.clip = sound.audioClip;
         audioSource.outputAudioMixerGroup = sound.outputAudioMixerGroup;
+        sound.audioSourceInUse = audioSource;
 
         if (sound.useDefaultSettings) //default settings set on AudioManager Component
         {
@@ -333,32 +418,17 @@ public class AudioManager : MonoBehaviour
             audioSource.pitch = _defaultSoundSettings.pitch;
             audioSource.volume = _defaultSoundSettings.volume;
             audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
+            audioSource.spread = _defaultSoundSettings.spread;
 
         }
-        else //use settings found on the Sound. Apply random values if wanted
+        else //use settings found on the Sound.
         {
             audioSource.priority = sound.soundSettings.priority;
             audioSource.loop = sound.soundSettings.loop;
-
-            if (sound.soundSettings.randomizePitch)
-            {
-                audioSource.pitch = Random.Range(sound.soundSettings.pitchRandomRange.x, sound.soundSettings.pitchRandomRange.y);
-            }
-            else
-            {
-                audioSource.pitch = sound.soundSettings.pitch;
-            }
-
-            if (sound.soundSettings.randomizeVolume)
-            {
-                audioSource.volume = Random.Range(sound.soundSettings.volumeRandomRange.x, sound.soundSettings.volumeRandomRange.y);
-            }
-            else
-            {
-                audioSource.volume = sound.soundSettings.volume;
-            }
-
+            audioSource.volume = sound.GetVolume();
+            audioSource.pitch = sound.GetPitch();
             audioSource.spatialBlend = sound.soundSettings.spatialBlend;
+            audioSource.spread = sound.soundSettings.spread;
         }
     }
 
@@ -370,42 +440,30 @@ public class AudioManager : MonoBehaviour
     /// <param name="clip">The AudioClip to assign to the AudioSource.</param>
     public void ApplySoundSettingsToAudioSource(SoundContainer soundContainer, AudioSource audioSource, AudioClip clip)
     {
+
+        if (!SoundShouldPlay(soundContainer)) { return; }
+
         audioSource.clip = clip;
         audioSource.outputAudioMixerGroup = soundContainer.outputAudioMixerGroup;
+        soundContainer.audioSourceInUse = audioSource;
 
         if (soundContainer.useDefaultSettings) //default settings set on AudioManager Component
         {
 
             audioSource.priority = _defaultSoundSettings.priority;
-            audioSource.loop = _defaultSoundSettings.loop;
             audioSource.pitch = _defaultSoundSettings.pitch;
             audioSource.volume = _defaultSoundSettings.volume;
             audioSource.spatialBlend = _defaultSoundSettings.spatialBlend;
+            audioSource.spread = _defaultSoundSettings.spread;
 
         }
-        else //use settings found on the SoundContainer. Apply random values if wanted
+        else //use settings found on the SoundContainer.
         {
             audioSource.priority = soundContainer.soundSettings.priority;
-
-            if (soundContainer.soundSettings.randomizePitch)
-            {
-                audioSource.pitch = Random.Range(soundContainer.soundSettings.pitchRandomRange.x, soundContainer.soundSettings.pitchRandomRange.y);
-            }
-            else
-            {
-                audioSource.pitch = soundContainer.soundSettings.pitch;
-            }
-
-            if (soundContainer.soundSettings.randomizeVolume)
-            {
-                audioSource.volume = Random.Range(soundContainer.soundSettings.volumeRandomRange.x, soundContainer.soundSettings.volumeRandomRange.y);
-            }
-            else
-            {
-                audioSource.volume = soundContainer.soundSettings.volume;
-            }
-
+            audioSource.volume = soundContainer.GetVolume();
+            audioSource.pitch = soundContainer.GetPitch();
             audioSource.spatialBlend = soundContainer.soundSettings.spatialBlend;
+            audioSource.spread = soundContainer.soundSettings.spread;
         }
     }
 
@@ -439,16 +497,17 @@ public class AudioManager : MonoBehaviour
             if (sb == null)
             {
                 soundsToDestroyList.Remove(sb);
-                return;
+                //return;
             }
 
             if (!sb.IsPlaying())
             {
                 soundsToDestroyList.Remove(sb);
                 sb.Stop();
+                //print("destroying " + sb.name);
                 sb.DestroyObject();
                 return;
-            }            
+            }
         }
 
         foreach (AudioSource audioSource in audioSourcesToDestroy)
@@ -467,26 +526,22 @@ public class AudioManager : MonoBehaviour
                 return;
             }
         }
-
-
-        
     }
 
-    /// <summary>
-    /// Kill the average audio object after it is finished playing
-    /// </summary>
-    /// <param name="averageAudio">What average audio object to kill</param>
-    public static void KillAverageAudio(AverageAudio averageAudio)
+    ///// <summary>
+    ///// Kill the average audio object after it is finished playing
+    ///// </summary>
+    ///// <param name="averageAudio">What average audio object to kill</param>
+    //public static void KillAverageAudio(AverageAudio averageAudio)
+    //{
+
+    //    instance.averageAudioList.Remove(averageAudio);
+    //    Destroy(averageAudio.gameObject);
+
+    //}
+
+    public IEnumerator FadeMusic(AudioSource audioSourceToFade, float duration, float targetVolume, bool stopOnEnd)
     {
-
-        instance.averageAudioList.Remove(averageAudio);
-        Destroy(averageAudio.gameObject);
-
-    }
-
-    public IEnumerator Fade(AudioSource audioSourceToFade,  float duration, float targetVolume, bool stopOnEnd)
-    {
-
 
         float timeElapsed = 0;
 
@@ -504,4 +559,77 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    public void FadeToDestroy(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
+    {
+        StartCoroutine(FadeToDestroyCoroutine(audioSourceToFade, startValue, duration, destroyObjectOrAudioSource));
+    }
+
+    public IEnumerator FadeToDestroyCoroutine(AudioSource audioSourceToFade, float startValue, float duration, bool destroyObjectOrAudioSource)
+    {
+
+        float timeElapsed = 0;
+
+        while (timeElapsed < duration)
+        {
+            audioSourceToFade.volume = Mathf.Lerp(startValue, 0, timeElapsed / duration);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (destroyObjectOrAudioSource)
+        {
+            Destroy(audioSourceToFade.gameObject);
+
+        }
+        else
+        {
+
+            AudioSource[] sources = audioSourceToFade.gameObject.GetComponents<AudioSource>();
+            if (sources.Length <= 1)
+            {
+                audioSourceToFade.Stop();
+                audioSourceToFade.clip = null;
+            }
+            else
+            {
+                Destroy(audioSourceToFade);
+            }
+
+        }
+    }
+
+    public void ApplySoundSettingsToSound(SoundBase soundToCopySettings, SoundBase soundToApplySettings)
+    {
+
+        if (!SoundShouldPlay(soundToCopySettings) || !SoundShouldPlay(soundToApplySettings)) { return; }
+
+        soundToApplySettings.outputAudioMixerGroup = soundToCopySettings.outputAudioMixerGroup;
+        soundToApplySettings.soundSettings = soundToCopySettings.soundSettings;
+    }
+
+    private bool SoundShouldPlay(SoundBase sound)
+    {
+
+        if (!SceneManager.GetActiveScene().isLoaded)
+        {
+            if (printDebugMessages) print($"scene is not loaded! could not play {sound.name}!");
+            return false;
+        }
+        else if (!sound.IsValid())
+        {
+            if (printDebugMessages) print($"sound is not valid! could not play {sound.name}!");
+            return false;
+        }
+        else if (sound.SoundInCooldown(Time.time))
+        {
+            if (printDebugMessages) print($"sound in cooldown! could not play {sound.name}!");
+            return false;
+        }
+        else { return true; }
+
+    }
+
 }
+
+
+

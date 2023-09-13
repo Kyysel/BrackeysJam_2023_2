@@ -1,77 +1,54 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
-/// <summary>
-/// A class to leverage average audio positions of multiple transforms. 
-/// </summary>
-public class AverageAudio : MonoBehaviour
-{
-    [Tooltip("The list of transforms to track")]
-    public List<Transform> transforms = new List<Transform>();
-
-    [Tooltip("The Sound to play at the averaged location")]
-    public Sound averageSound;
-
 
     /// <summary>
-    /// Adding an audio source and playing it after adjusting parameters
+    /// A class to leverage average audio positions of multiple transforms. 
     /// </summary>
-    public void PlayAverageAudio()
+    public class AverageAudio : MonoBehaviour
     {
-        AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-        AudioManager.instance.ApplySoundSettingsToAudioSource(averageSound, audioSource);
-        audioSource.Play();
-    }
 
-    /// <summary>
-    /// Get the average transform of the transforms
-    /// </summary>
-    /// <returns>Returns the average position of the transforms</returns>
-    public Vector2 TryGetAveragePos()
-    {
-        float totalX = 0;
-        float totalY = 0;
+        [Tooltip("The list of transforms to track")]
+        public List<Transform> listOfTransformsToTrack = new List<Transform>();
 
-        foreach (var transform in transforms)
+        public AudioSource audioSource;
+        public BasicSound sound;
+
+        /// <summary>
+        /// Get the average transform of the transforms
+        /// </summary>
+        /// <returns>Returns the average position of the transforms</returns>
+        public Vector2 TryGetAveragePos()
         {
-            if (transform != null)
+            float totalX = 0;
+            float totalY = 0;
+
+            foreach (var transform in listOfTransformsToTrack)
             {
-                totalX += transform.transform.position.x;
-                totalY += transform.transform.position.y;
+                if (transform != null)
+                {
+                    totalX += transform.position.x;
+                    totalY += transform.position.y;
+                }
             }
+
+            return new Vector2(totalX / listOfTransformsToTrack.Count, totalY / listOfTransformsToTrack.Count);
         }
 
-        if (totalX == 0 && totalY == 0)
+        /// <summary>
+        /// Set the position of the GameObject to the average position of the transforms. 
+        /// </summary>
+        private void FixedUpdate()
         {
-            AudioManager.KillAverageAudio(this);
+            transform.position = TryGetAveragePos();
         }
 
-        return new Vector2(totalX / transforms.Count, totalY / transforms.Count);
-    }
-
-    /// <summary>
-    /// Set the position of the GameObject to the average position of the transforms. 
-    /// </summary>
-    private void FixedUpdate()
-    {
-        transform.position = TryGetAveragePos();
-
-        if (!averageSound.IsPlaying())
+        public void DestroyAverageAudio(float fadeDuration)
         {
-            AudioManager.KillAverageAudio(this);
+            AudioManager.instance.FadeToDestroy(audioSource, audioSource.volume, fadeDuration, true);
         }
 
     }
 
-    /// <summary>
-    /// Sets the list of Transforms and the Sound used for this AverageAudio. 
-    /// </summary>
-    /// <param name="transforms">The list of projectiles this AverageAudio will use to calculate average positions. </param>
-    /// <param name="sound">The Sound this AverageAudio will play. </param>
-    public void SetTransformsAndSound(List<Transform> transforms, Sound sound)
-    {
-        this.transforms = transforms;
-        this.averageSound = sound;
-    }
-}

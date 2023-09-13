@@ -38,7 +38,7 @@ public class WormController : MonoBehaviour
 
     [Header("References")] public GameObject buildingTarget;
 
-    public Sound moveSound, damageSound;
+    public BasicSound moveSound, damageSound;
 
     private Dictionary<string, int> _resourceDict;
     private WormTail _wormTail;
@@ -51,7 +51,7 @@ public class WormController : MonoBehaviour
         
         InitializeGrid();
         NewTarget();
-        AudioManager.instance.PlaySoundOnTarget(moveSound, wormHead.transform);
+        AudioManager.instance.PlaySoundBaseOnTarget(moveSound, wormHead.transform, false);
         
         _resourceDict = new Dictionary<string, int>();
         foreach (string s in ResourceManager.Instance.resourceTypes)
@@ -167,14 +167,14 @@ public class WormController : MonoBehaviour
                 ResourceManager.Instance.ChangeResource(entry.Key, entry.Value);
             }
 
-            AudioManager.instance.PlaySoundAtPos(damageSound, transform.position);
+            AudioManager.instance.PlaySoundBaseAtPos(damageSound, transform.position, gameObject.name);
             StopAllCoroutines();
             Destroy(this.gameObject);
             return;
 
         } else
         {
-            AudioManager.instance.CreateSourceAndPlay(damageSound, wormHead.transform, false);
+            AudioManager.instance.PlaySoundBaseOnTarget(damageSound, wormHead.transform, false);
         }
 
         invulnerable = true;
@@ -198,7 +198,7 @@ public class WormController : MonoBehaviour
         _wormTail.targetDist += growthRate;
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()  //got a null reference error
     {
         // show the grid
         Gizmos.color = Color.yellow;
