@@ -29,7 +29,10 @@ public class UpgradeManager : MonoBehaviour
     void Start()
     {
         resourceManager = ResourceManager.Instance;
-        
+        foreach (var upgrade in upgrades)
+        {
+            upgrade.Initialize();
+        }
     }
     
     public bool canUpgrade(Upgrade upgrade)

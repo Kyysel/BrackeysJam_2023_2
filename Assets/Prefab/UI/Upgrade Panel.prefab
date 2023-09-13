@@ -1711,7 +1711,7 @@ GameObject:
   - component: {fileID: 810498525132117209}
   - component: {fileID: 35443045073811006}
   m_Layer: 5
-  m_Name: Building Panel
+  m_Name: Upgrade Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 public class Upgrade : MonoBehaviour
 {
     private ResourceManager resourceManager;
+    private UpgradeManager upgradeManager;
+    private int upgradeLevel = 0;
     public Dictionary<string, int> costsDict;
     public List<int> costsArray;
     public string upgradeName;
@@ -18,14 +20,25 @@ public class Upgrade : MonoBehaviour
             resourceManager.resourceDict[resource] -= costsDict[resource];
         }
         UpgradeManager.Instance.level++;
+        upgradeLevel++;
         HUDController.Instance.UpdateResourceHUD();
         Debug.Log("Building " + upgradeName);
         
-        //TODO update the costs
+        UpgradeCosts();
+        
+    }
+
+    //TODO implement function
+    public void UpgradeCosts()
+    {
+        
     }
 
     public void Initialize()
     {
+        upgradeLevel = 0;
+        upgradeManager = UpgradeManager.Instance;
+        
         costsDict = new Dictionary<string, int>();
         resourceManager = ResourceManager.Instance;
         

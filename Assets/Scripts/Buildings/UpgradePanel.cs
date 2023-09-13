@@ -5,7 +5,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BuildingPanel : MonoBehaviour
+public class UpgradePanel : MonoBehaviour
 {
     public Image icon;
     //public Building building;
@@ -26,7 +26,6 @@ public class BuildingPanel : MonoBehaviour
                 go.SetActive(false);
             }
         }
-
     }
 
     private void InitializeBuildingImage()

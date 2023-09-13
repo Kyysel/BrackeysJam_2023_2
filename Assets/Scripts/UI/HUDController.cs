@@ -15,11 +15,13 @@ public class HUDController : MonoBehaviour
     public TextMeshProUGUI levelIndicatorUI;
     
     public Dictionary<string, TextMeshProUGUI> resourceTextDict;
+    public Dictionary<string, TextMeshProUGUI> refinedResourceTextDict;
     public GameObject resourcePanelPrefab;
     public GameObject resourcesPanelUI;
+    public GameObject refinedResourcesPanelUI;
 
-    public GameObject buildingPanelUI;
-    public GameObject buildingPanelPrefab;
+    public GameObject upgradePanelUI;
+    public GameObject upgradePanelPrefab;
 
     public GameObject topPanelHUD;
     public bool hudActive = false;
@@ -40,10 +42,11 @@ public class HUDController : MonoBehaviour
         topPanelHUDTransform = new Vector3(topPanelHUD.transform.localPosition.x, topPanelHUD.transform.localPosition.y);
         resourceManager = ResourceManager.Instance;
         resourceTextDict = new Dictionary<string, TextMeshProUGUI>();
-        // create the dictionnary based on ResourceManager's resourceTypes
+        refinedResourceTextDict = new Dictionary<string, TextMeshProUGUI>();
         foreach (string name in ResourceManager.Instance.resourceTypes)
         {
             resourceTextDict.Add(name, null);
+            refinedResourceTextDict.Add(name, null);
         }
         
         InitializeHUD();
@@ -78,6 +81,7 @@ public class HUDController : MonoBehaviour
     {
         // access the specific text UI and update it
         resourceTextDict[type].text = resourceManager.resourceDict[type].ToString();
+        refinedResourceTextDict[type].text = resourceManager.refinedResourceDict[type].ToString();
     }
     
     public void UpdateResourceHUD()
@@ -85,6 +89,7 @@ public class HUDController : MonoBehaviour
         foreach (string resource in resourceManager.resourceTypes)
         {
             resourceTextDict[resource].text = resourceManager.resourceDict[resource].ToString();
+            refinedResourceTextDict[resource].text = resourceManager.refinedResourceDict[resource].ToString();
         }
         levelIndicatorUI.text = "Level : " + UpgradeManager.Instance.level;
     }
@@ -108,15 +113,25 @@ public class HUDController : MonoBehaviour
             resourceTextDict[resourceManager.resourceTypes[i]] = panel.text;
             
             resourcePanel.transform.SetParent(resourcesPanelUI.transform, false);
+            
+            // same thing with the refined resource panel
+            GameObject refinedResourcePanel = Instantiate(resourcePanelPrefab, transform);
+            refinedResourcePanel.name =  "Refined" + resourceManager.resourceTypes[i] + "Panel";
+            ResourcePanel refinedPanel = refinedResourcePanel.GetComponent<ResourcePanel>();
+            refinedPanel.icon.sprite = resourceManager.refinedResourceImages[i];
+            refinedPanel.text.text = "0";
+            refinedResourceTextDict[resourceManager.resourceTypes[i]] = refinedPanel.text;
+            refinedResourcePanel.transform.SetParent(refinedResourcesPanelUI.transform, false);
+            
         }
 
         foreach (Upgrade upgrade in UpgradeManager.Instance.upgrades)
         {
-            GameObject buildingPanel = Instantiate(buildingPanelPrefab, transform);
-            buildingPanel.name = upgrade.upgradeName + "Panel";
+            GameObject upgradePanel = Instantiate(upgradePanelPrefab, transform);
+            upgradePanel.name = upgrade.upgradeName + "Panel";
             
             //create the building panel
-            BuildingPanel panel = buildingPanel.GetComponent<BuildingPanel>();
+            UpgradePanel panel = upgradePanel.GetComponent<UpgradePanel>();
             panel.icon.sprite = upgrade.icon;
             
             //TODO add the list of resources need to build
@@ -129,7 +144,7 @@ public class HUDController : MonoBehaviour
                 text.text = cost.ToString();
             }
 
-            buildingPanel.transform.SetParent(buildingPanelUI.transform, false);
+            upgradePanel.transform.SetParent(upgradePanelUI.transform, false);
         }
         
     }

@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class ProductionUpgrade : Upgrade
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        Initialize();
-    }
+    /* The Production upgrade will convert resources their refined version over time
+    The production speed depends on the level of the upgrade
+    */
 
     // Update is called once per frame
     void Update()

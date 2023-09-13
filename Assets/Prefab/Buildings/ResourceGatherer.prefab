@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6792727876890668504}
   - component: {fileID: 6792727876890668507}
   - component: {fileID: 3208399020932845194}
-  - component: {fileID: 2078971401741145220}
   m_Layer: 7
   m_Name: ResourceGatherer
   m_TagString: Building
@@ -112,18 +111,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 4.5, y: 6}
   m_EdgeRadius: 0
---- !u!114 &2078971401741145220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6792727876890668506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e555f6e582f9b41aded0dcbf82976b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  costsArray: 19000000
-  upgradeName: Production
-  icon: {fileID: -1173700042, guid: 27456e57a946f75419d4ff303d3ea122, type: 3}

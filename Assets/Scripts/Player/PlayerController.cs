@@ -30,7 +30,4 @@ public class PlayerController : MonoBehaviour
 
         GetComponentInChildren<WormTail>().InitializeTail(length, segmentPrefab, this.gameObject);
     }
-    
-    
-    
 }

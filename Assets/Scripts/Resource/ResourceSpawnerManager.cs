@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class ResourceSpawnerManager : MonoBehaviour
 {
+    public Transform ground;
     public List<Sprite> resourceSprites;
     public List<ResourceDeposit> resourceDeposits;
 
@@ -51,8 +52,9 @@ public class ResourceSpawnerManager : MonoBehaviour
                     {
                         // spawn a resource
                         Vector3 spawnLocation = grid[i] + new Vector2(UnityEngine.Random.Range(-1/2f, 1/2f), UnityEngine.Random.Range(-1f, 1f));
-                       Instantiate(resourceDeposit.gameObject, spawnLocation, Quaternion.identity);
-                       gridCopy[i] = 1;
+                        GameObject inst = Instantiate(resourceDeposit.gameObject, spawnLocation, Quaternion.identity);
+                        inst.transform.SetParent(ground);
+                        gridCopy[i] = 1;
                     }
                 }
             }

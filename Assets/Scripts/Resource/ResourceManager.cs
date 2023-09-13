@@ -9,9 +9,11 @@ public class ResourceManager : MonoBehaviour
     public static ResourceManager Instance;
     public string[] resourceTypes;
     public Sprite[] resourceImages;
+    public Sprite[] refinedResourceImages;
     public BasicSound resourceDestroySound;
     
     public Dictionary<string, int> resourceDict = new Dictionary<string, int>();
+    public Dictionary<string, int> refinedResourceDict = new Dictionary<string, int>();
 
     public static event Action<string> CollectResourcesEvent;
 
@@ -33,6 +35,8 @@ public class ResourceManager : MonoBehaviour
         {
             resourceDict.Add(s, 0);
         }
+
+        refinedResourceDict = new Dictionary<string, int>(resourceDict);
     }
 
     private void Update()
