@@ -1233,9 +1233,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e555f6e582f9b41aded0dcbf82976b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  costsArray: 19000000
+  resourceManager: {fileID: 0}
   upgradeName: Production
   icon: {fileID: -1173700042, guid: 27456e57a946f75419d4ff303d3ea122, type: 3}
+  upgradePanel: {fileID: 0}
+  costsArray: 19000000
+  productionSpeed: 5
 --- !u!114 &911117403
 MonoBehaviour:
   m_ObjectHideFlags: 0

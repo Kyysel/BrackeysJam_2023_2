@@ -18,9 +18,6 @@ public class PlayerController : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 30);
         foreach (Collider2D collider in colliders)
         {
-
-            print($"found {gameObject.name}");
-
             if (collider.CompareTag("ResourceDeposit"))
             {
                 print($"destroying {gameObject.name}");

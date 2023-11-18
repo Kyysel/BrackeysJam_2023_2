@@ -22,6 +22,7 @@ public class HUDController : MonoBehaviour
 
     public GameObject upgradePanelUI;
     public GameObject upgradePanelPrefab;
+    
 
     public GameObject topPanelHUD;
     public bool hudActive = false;
@@ -99,41 +100,41 @@ public class HUDController : MonoBehaviour
      */
     public void InitializeHUD()
     {
-        for (int i=0; i<resourceManager.resourceTypes.Length; i++)
+        for (int i = 0; i < resourceManager.resourceTypes.Length; i++)
         {
             GameObject resourcePanel = Instantiate(resourcePanelPrefab, transform);
-            resourcePanel.name =  resourceManager.resourceTypes[i] + "Panel";
-            
+            resourcePanel.name = resourceManager.resourceTypes[i] + "Panel";
+
             // create the resource panel
             ResourcePanel panel = resourcePanel.GetComponent<ResourcePanel>();
             panel.icon.sprite = resourceManager.resourceImages[i];
             panel.text.text = "0";
-            
+
             // assign the text UI to the dictionary
             resourceTextDict[resourceManager.resourceTypes[i]] = panel.text;
-            
+
             resourcePanel.transform.SetParent(resourcesPanelUI.transform, false);
-            
+
             // same thing with the refined resource panel
             GameObject refinedResourcePanel = Instantiate(resourcePanelPrefab, transform);
-            refinedResourcePanel.name =  "Refined" + resourceManager.resourceTypes[i] + "Panel";
+            refinedResourcePanel.name = "Refined" + resourceManager.resourceTypes[i] + "Panel";
             ResourcePanel refinedPanel = refinedResourcePanel.GetComponent<ResourcePanel>();
             refinedPanel.icon.sprite = resourceManager.refinedResourceImages[i];
             refinedPanel.text.text = "0";
             refinedResourceTextDict[resourceManager.resourceTypes[i]] = refinedPanel.text;
             refinedResourcePanel.transform.SetParent(refinedResourcesPanelUI.transform, false);
-            
+
         }
 
         foreach (Upgrade upgrade in UpgradeManager.Instance.upgrades)
         {
             GameObject upgradePanel = Instantiate(upgradePanelPrefab, transform);
             upgradePanel.name = upgrade.upgradeName + "Panel";
-            
+
             //create the building panel
             UpgradePanel panel = upgradePanel.GetComponent<UpgradePanel>();
             panel.icon.sprite = upgrade.icon;
-            
+
             //TODO add the list of resources need to build
 
             for (int i = 0; i < upgrade.costsArray.Count; i++)
@@ -145,8 +146,7 @@ public class HUDController : MonoBehaviour
             }
 
             upgradePanel.transform.SetParent(upgradePanelUI.transform, false);
+            upgrade.upgradePanel = panel;
         }
-        
     }
-
 }

@@ -8,13 +8,10 @@ using UnityEngine.UI;
 public class UpgradePanel : MonoBehaviour
 {
     public Image icon;
-    //public Building building;
-    //public GameObject resourceCostPanel;
     public GameObject[] resourcePanels;
 
     private void Start()
     {
-
         InitializeBuildingImage();
         //Initialize cost icons
         foreach (GameObject go in resourcePanels)

@@ -37,9 +37,9 @@ public class UpgradeManager : MonoBehaviour
     
     public bool canUpgrade(Upgrade upgrade)
     {
-        foreach (string resource in resourceManager.resourceDict.Keys)
+        foreach (string resource in resourceManager.resourceTypes)
         {
-            if (resourceManager.resourceDict[resource] - upgrade.costsDict[resource] < 0)
+            if (resourceManager.refinedResourceDict[resource] - upgrade.costsDict[resource] < 0)
             {
                 return false;
             }

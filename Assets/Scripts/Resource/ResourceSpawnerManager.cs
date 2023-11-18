@@ -39,7 +39,6 @@ public class ResourceSpawnerManager : MonoBehaviour
         int[] gridCopy = new int[grid.Length];
         foreach (ResourceDeposit resourceDeposit in resourceDeposits)
         {
-            print("generation of " + resourceDeposit.resourceName);
             // go through each grid point and spawn a resource with probability x if its within the min and max depth
             // the size controls how many resources are spawned
             for (int i = 0; i < grid.Length; i++)

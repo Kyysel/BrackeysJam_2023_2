@@ -60,4 +60,13 @@ public class ResourceManager : MonoBehaviour
             CollectResourcesEvent(type);
         }
     }
+
+    public void ChangeRefinedResource(string type, int amount)
+    {
+        refinedResourceDict[type] += amount;
+        if (CollectResourcesEvent != null)
+        {
+            CollectResourcesEvent(type);
+        }
+    }
 }
