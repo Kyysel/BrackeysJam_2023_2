@@ -21,6 +21,7 @@ public class DefenseUpgrade : Upgrade
         StartCoroutine(RegenerateShield());
     }
 
+    #region testing ONLY
     private void Update()
     {
         // if we press the spacebar, we take 2 damage
@@ -38,6 +39,7 @@ public class DefenseUpgrade : Upgrade
             shieldBar.SetValue(currentShield);
         }
     }
+    #endregion
 
     private IEnumerator RegenerateShield()
     {
